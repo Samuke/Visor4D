@@ -1,0 +1,10 @@
+html, body{height:100%;}
+body{margin:0;line-height:0;}
+figure{margin:0;}
+.vCubo{background-color:#ccc;height:80%;width:100%;}
+.linT{align-items:center;background-color:tomato;display:flex;height:20%;padding:0 1.5em;width:calc(100% - 3em);}
+.play{background-color:blue;border:none;border-radius:100%;cursor:pointer;font-size:0;height:50px;margin-right:20px;width:50px;}
+.play:hover{background-color:#0088ff;}
+.play:before{border-bottom:10px solid transparent;border-left:10px solid white;border-right:10px solid transparent;border-top:10px solid transparent;content:'';height:10px;width:10px;margin-left:calc(50% - 5px);}
+.barra{background-color:lime;height:1em;width:100%;}
+.progreso{background-color:blue;height:100%;width:0;}

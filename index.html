@@ -1,33 +1,22 @@
 <!DOCTYPE html >
 <html lang="es">
 <head>
-<!--<meta http-equiv="X-UA-Compatible" content="chrome=1" />
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />-->
 <title>Visor</title>
 <meta charset="UTF-8"/>
-<!--<script src=".\d3.v5.min.js"></script>-->
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="https://unpkg.com/d3-3d/build/d3-3d.min.js"></script>
-<style>
-html, body{height:100%;}
-body{margin:0;line-height:0;}
-figure{margin:0;}
-.vCubo{background-color:#ccc;height:80%;width:100%;}
-.linT{align-items:center;background-color:tomato;display:flex;height:20%;padding:0 1.5em;width:calc(100% - 3em);}
-.play{background-color:blue;border:none;border-radius:100%;cursor:pointer;font-size:0;height:50px;margin-right:20px;width:50px;}
-.play:hover{background-color:#0088ff;}
-.play:before{border-bottom:10px solid transparent;border-left:10px solid white;border-right:10px solid transparent;border-top:10px solid transparent;content:'';height:10px;width:10px;margin-left:calc(50% - 5px);}
-.barra{background-color:lime;height:1em;width:100%;}
-</style>
+<link href="style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
-<!--<div id="divPlot"></div>-->
 <svg class="vCubo"></svg>
 <script src="cubito.js"></script>
+<!--<script src="sensor.js"></script>-->
 <div class="linT">
 	<button class="play"></button>
-	<track class="barra"></track>
+	<div class="barra">
+		<div class="progreso"></div><!--A esto se le va cambiando el width (con JS), ejemplo 'style="width:231px;"'-->
+	</div>
 </div>
 <script src="linea.js"></script>
 </body>
