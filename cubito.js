@@ -52,8 +52,7 @@ function dataCSensor(data, tt){
 		.enter()
 		.append('g')
 		.attr('class', 'sensor')
-		.attr('fill', 'none')//relleno del cubo: ninguno
-		.attr('stroke', d3.rgb(0,0,0) )//color de los bordes: rojo
+		.attr('fill', d3.rgb(100,100,100))//relleno del cubo: ninguno		.attr('stroke', d3.rgb(0,0,0) )//color de los bordes: rojo
 		.merge(cubos);
 
 	cubos.exit().remove();
@@ -63,7 +62,7 @@ function dataCSensor(data, tt){
 	faces.enter()
 		.append('path')
 		.attr('class', 'cara')
-		.attr('fill-opacity', 0.5)
+		.attr('fill-opacity', 0.1)
 		.attr('stroke-width', 1)
 		.classed('le_3d', true)
 		.merge(faces)
@@ -85,7 +84,7 @@ function init(alto, largo, ancho){
 function initSensor(id, posX, posY, posZ, radio){
 	console.log("initSensor");
 	sensorData = [];
-	var _cubo = makeSensor(270, 0, -125, radio);
+	var _cubo = makeSensor(0, 0, -125, radio); //POS X Y Z SENSOR
 		_cubo.id = 'sensor' + id;
 		_cubo.height = radio;
 		_cubo.width = radio;
@@ -132,17 +131,17 @@ function makeSensor(x, y, z, radio){
 	console.log("makeSensor");
 	r = 0;
 	var regresa = [
-		{x: x - radio, y: y + radio, z: z + 0}, // FRONT TOP LEFT
-		{x: x - radio, y: y - radio, z: z + 0}, // FRONT BOTTOM LEFT
+		{x: x - 300, y: y + 160, z: z + 0}, // FRONT TOP LEFT
+		{x: x - 300, y: y - 160, z: z + 0}, // FRONT BOTTOM LEFT
 		
-		{x: x + radio, y: y - radio, z: z + 0}, // FRONT BOTTOM RIGHT
-		{x: x + radio, y: y + radio, z: z + 0}, // FRONT TOP RIGHT
+		{x: x + 300, y: y - 160, z: z + 0}, // FRONT BOTTOM RIGHT
+		{x: x + 300, y: y + 160, z: z + 0}, // FRONT TOP RIGHT
 		
-		{x: x - radio, y: y + radio, z: z - 0}, // BACK  TOP LEFT
-		{x: x - radio, y: y - radio, z: z - 0}, // BACK  BOTTOM LEFT
+		{x: x - 300, y: y + 160, z: z - 0}, // BACK  TOP LEFT
+		{x: x - 300, y: y - 160, z: z - 0}, // BACK  BOTTOM LEFT
 		
-		{x: x + radio, y: y - radio, z: z - 0}, // BACK  BOTTOM RIGHT
-		{x: x + radio, y: y + radio, z: z - 0}, // BACK  TOP RIGHT
+		{x: x + 300, y: y - 160, z: z - 0}, // BACK  BOTTOM RIGHT
+		{x: x + 300, y: y + 160, z: z - 0}, // BACK  TOP RIGHT
 	];
 	console.log(regresa);
 	return regresa;
