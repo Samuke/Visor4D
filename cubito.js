@@ -24,7 +24,7 @@ function processData(data, tt){
 		.append('g')
 		.attr('class', 'cube')
 		.attr('fill', 'none')//relleno del cubo: ninguno
-		.attr('stroke', d3.rgb(0,136,255) )//color de los bordes: azules
+		.attr('stroke', d3.rgb(0,0,0) )//color de los bordes: azules
 		.merge(cubes);
 
 	cubes.exit().remove();
@@ -36,7 +36,7 @@ function processData(data, tt){
 		.append('path')
 		.attr('class', 'face')
 		.attr('fill-opacity', 0.95)
-		.attr('stroke-width', 4)
+		.attr('stroke-width', 1)
 		.classed('_3d', true)
 		.merge(faces)
 		.transition().duration(tt)
@@ -64,7 +64,7 @@ function dataCSensor(data, tt){
 		.append('path')
 		.attr('class', 'cara')
 		.attr('fill-opacity', 0.5)
-		.attr('stroke-width', 3)
+		.attr('stroke-width', 1)
 		.classed('le_3d', true)
 		.merge(faces)
 		.transition().duration(tt)
