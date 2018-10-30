@@ -1,4 +1,4 @@
-var origin = [(screen.width)/2, (screen.height)/2-100], scale = 10, cubesData = [], sensorData = [], alpha = 0, beta = 0, startAngle = Math.PI/6;
+var origin = [400, 300], scale = 10, cubesData = [], sensorData = [], alpha = 0, beta = 0, startAngle = Math.PI/6;
 var svg    = d3.select('.vCubo').call(d3.drag().on('drag', dragged).on('start', dragStart).on('end', dragEnd)).append('g')
 // var svg2   = d3.select('.vCubo').append('s');
 var cubesGroup = svg.append('g').attr('class', 'cubes');
@@ -36,7 +36,7 @@ function processData(data, tt){
 	faces.enter()
 		.append('path')
 		.attr('class', 'face')
-		.attr('fill-opacity', 0.95)
+		.attr('fill-opacity', 0.1)
 		.attr('stroke-width', 0)
 		.classed('_3d', true)
 		.merge(faces)
@@ -65,7 +65,7 @@ function dataFaces(data, tt){
 		.append('path')
 		.attr('class', 'cara')
 		.attr('fill-opacity', 0.12) // OPACIDAD CARAS DEL PRISMA 
-		.attr('stroke-width', 1)
+		.attr('stroke-width', 0.1)
 		.classed('le_3d', true)
 		.merge(faces)
 		.transition().duration(tt)
@@ -90,19 +90,19 @@ function initFaces(id, posX, posY, posZ){  // Creacion caras del prisma.
 		if(i == 0){ 			//ARREGLO nPos SON LAS DIMENSIONES EN PX DEL PRISMA, ESTA CREADA AL COMIENZO.
 			nDraw = [nPos[1]/2,0,nPos[2]/2]    //ARREGLO DONDE SE PASA DIMENSIONES X,Y,Z PARA UTILIZARLO EN makeFaces.
 			var _cubo = makeFaces(0,nPos[0]/2, 0, nDraw); //CARA DE BASE.
-				_cubo.id = 'cara' + id;
+				_cubo.id = 'cara' + 1;
 				sensorData.push(_cubo);
 		}
 		if(i == 1){ 	
 			nDraw = [0,nPos[0]/2,nPos[2]/2]   
 			var _cubo = makeFaces(nPos[1]/2,0, 0, nDraw); // CARA DERECHA.
-				_cubo.id = 'cara' + id;
+				_cubo.id = 'cara' + 2;
 				sensorData.push(_cubo);
 		}
 		if(i == 2){ 	
 			nDraw = [nPos[1]/2,nPos[0]/2,0]
 			var _cubo = makeFaces(0,0,-nPos[2]/2, nDraw); //CARA FONDO.
-				_cubo.id = 'cara' + id;
+				_cubo.id = 'cara' + 3;
 				sensorData.push(_cubo);
 		}
 	}
