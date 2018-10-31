@@ -6,27 +6,45 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="https://unpkg.com/d3-3d/build/d3-3d.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script>
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover();
+});
+</script>
 </head>
 <body>
 <svg class="vCubo" id="chart" width="800" height="600"
   viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet"></svg>
 <script src="cubito.js"></script>
-<div class="linT">
+
+<div class="text-center">
+	<button type="button" class="btn btn-success" data-placement="top" id="botoninfo" data-toggle="popover" title="INFORMACION" data-content="Aquí veras las alertas">VER INFO.CUBO</button>
+
+	<button type="button" class="btn btn-danger" data-placement="top" id="botonalerta" data-toggle="popover" title="ALERTAS" data-content="Aquí veras las alertas">VER ALERTAS</button>
+
+	<button type="button" class="btn btn-primary" data-placement="top" id="botonvariables" data-toggle="popover" title="VARIABLES" data-content="Aquí veras las alertas">VER VARIABLES</button>
+</div>
+
+<!-- <div class="linT">
 	<button class="play"></button>
 	<div class="barra">
 		<div class="progreso"></div>
 	</div>
-</div>
-<!--<div class="row">
-    <div class="col-md-1">    </div>
+</div> -->
+
+<div>
+	<div class="col-md-1"></div>
     <div class="col-md-10 lt">
-        <h2><i class="fas fa-play"></i></h2>
-        <h2><i class="fas fa-pause"></i></h2>
+    	<h2><i class="fas fa-play"></i></h2>
     </div>
     <div class="col-md-1"></div>
-</div>-->
+</div>
+
+</div>
 </body>
 </html>
