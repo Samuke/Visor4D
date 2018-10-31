@@ -3,13 +3,9 @@ body{margin:0;line-height:0;}
 figure{margin:0;}
 .vCubo{background-color:white;height:80%;width:100%;}
 .linT{align-items:center;background-color:#aeaeae;display:flex;height:20%;padding:0 1.5em;width:calc(100% - 3em);}
-.play{background-color:#1e40a1;border:none;border-radius:100%;cursor:pointer;font-size:0;height:50px;margin-right:20px;width:50px;}
-.play:hover{background-color:#6ea4f5;}
+.play{background-color:#2e2e2e;border:none;border-radius:100%;cursor:pointer;font-size:0;height:50px;margin-right:20px;width:50px;}
+.play:hover{background-color:#787878;}
 .play:before{border-bottom:10px solid transparent;border-left:10px solid white;border-right:10px solid transparent;border-top:10px solid transparent;content:'';height:10px;width:10px;margin-left:calc(50% - 5px);}
-.barra{background-color:#6ea4f5;border-radius:100px;height:0.8em;overflow:hidden;width:100%;}
-.progreso{background-color:blue;height:100%;width:0;}
-.lt{
-    botton-top:100px;
-    background-color:rgba(0, 0, 0, 0.3); 
-    height: 40px;
-}
+.barra{background-color:#868686;border-radius:100px;height:0.8em;overflow:hidden;width:100%;}
+.progreso{background-color:#4e4eff;height:100%;width:0;}
+.lt{botton-top:100px;background-color:rgba(0,0,0,0.3);height:40px;}
