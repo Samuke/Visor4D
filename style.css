@@ -9,9 +9,22 @@ figure{margin:0;}
 .barra{background-color:#868686;border-radius:100px;height:0.8em;overflow:hidden;width:100%;}
 .progreso{background-color:#4e4eff;height:100%;width:0;}
 
+/* letra de medidor */
+@import 'https://fonts.googleapis.com/css?family=Roboto';
 
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* barra de temp */
+#tempe{
+  position: relative;
+  top:-750px;
+  left:-300px;
+  border: 3px solid black;
+}
 #botoninfo, #botonalerta, #botonvariables{
 	margin-bottom: 17px;
 }
 
-.lt{botton-top:100px;background-color:rgba(0,0,0,0.3);height:40px;border-radius:15px;}
+.lt{botton-top:130px;background-color:rgba(0,0,0,0.3);height:60px;border-radius:20px;}
