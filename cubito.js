@@ -1,6 +1,6 @@
 var origin = [400, 300], scale = 10, cubesData = [], sensorData = [], leSensor = [], alpha = 0, beta = 0, startAngle = Math.PI/6;
 var svg    = d3.select('.vCubo').call(d3.drag().on('drag', dragged).on('start', dragStart).on('end', dragEnd)).append('g');
-var cubesGroup = svg.append('g').attr('class', 'cubes');
+//var cubesGroup = svg.append('g').attr('class', 'cubes');
 var carasPrisma = svg.append('g').attr('class', 'caras');
 var nodeSensor = svg.append('g').attr('class', 'caras');
 var sensorGroup = svg.append('g').attr('class', 'sensores');
@@ -42,34 +42,6 @@ var cubes3D = d3._3d()
 	.rotateX(-startAngle)
 	.origin(origin);
 
-function processData(data, tt){
-	/* --------- CUBES ---------*/
-	var cubes = cubesGroup.selectAll('g.cube').data(data, function(d){ return d.id });
-
-	var ce = cubes
-		.enter()
-		.append('g')
-		.attr('class', 'cube')
-		.attr('fill', 'none') // Relleno del cubo: ninguno
-		.attr('stroke', d3.rgb(0,0,0) ) // Color de los bordes: negros
-		.merge(cubes);
-
-	cubes.exit().remove();
-
-	/* --------- FACES ---------*/
-	var faces = cubes.merge(ce).selectAll('path.face').data(function(d){ return d.faces; }, function(d){ return d.face; });
-
-	faces.enter()
-		.append('path')
-		.attr('class', 'face')
-		.attr('fill-opacity', 0.1)
-		.attr('stroke-width', 0)
-		.classed('_3d', true)
-		.merge(faces)
-		.transition().duration(tt)
-		.attr('d', cubes3D.draw);
-
-	faces.exit().remove();}
 
 function dataFaces(data, tt){
 	var cubos = carasPrisma.selectAll('g.caras').data(data, function(d){ return d.id });
@@ -95,15 +67,6 @@ function dataFaces(data, tt){
 		.merge(faces)
 		.transition().duration(tt)
 		.attr('d', cubes3D.draw);
-}
-
-
-function init(alto, largo, ancho){
-	cubesData = [];
-	var _cube = makeCube(alto, largo, ancho);
-		_cube.id = 'cube_1';
-		cubesData.push(_cube);
-	processData(cubes3D(cubesData), 1000);
 }
 
 function initFaces(id, posX, posY, posZ){  // Creacion caras del prisma.
@@ -140,7 +103,7 @@ function dragged(){
 	mouseY = mouseY || 0;
 	beta   = (d3.event.x - mx + mouseX) * Math.PI / 230 ;
 	alpha  = (d3.event.y - my + mouseY) * Math.PI / 230  * (-1);
-	processData(cubes3D.rotateY(beta + startAngle).rotateX(alpha - startAngle)(cubesData), 0);
+
 	dataCSensor(cubes3D.rotateY(beta + startAngle).rotateX(alpha - startAngle)(leSensor), 0);
 	dataFaces(cubes3D.rotateY(beta + startAngle).rotateX(alpha - startAngle)(sensorData), 0);}
 
@@ -150,7 +113,7 @@ function dragEnd(){
 
 function reiniciaPos(){
 	beta=0;alpha=0;mouseX=0;mouseY=0;
-	processData(cubes3D.rotateY(beta + startAngle).rotateX(alpha - startAngle)(cubesData), 0);
+	
 	dataCSensor(cubes3D.rotateY(beta + startAngle).rotateX(alpha - startAngle)(leSensor), 0);
 	dataFaces(cubes3D.rotateY(beta + startAngle).rotateX(alpha - startAngle)(sensorData), 0);}
 
@@ -258,7 +221,7 @@ function initallsensor(){
 
 // FIN CODIGO DE SENSORES
 
-init(320, 600, 250);
+
 initallsensor();
 initFaces(1,nPos[0],nPos[1],nPos[2]);
 
