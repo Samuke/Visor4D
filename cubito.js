@@ -14,7 +14,13 @@ $( document ).ready(function() {
 
 	function informe(){
 		var id = this.id;
-		alert("ID NODO: "+ id +"\nT : 24ºC \nH : 50% \nL : 10%"); // Temperatura, Humedad, Luminosidad 
+		var data = id.split(" ");
+		var idSensor = data[0];
+		var Temperatura = data[1];
+		var Humedad = data[2];
+		var Luminosidad = data[3];
+
+		alert("ID Sensor: "+idSensor+"\nTemperatura: "+Temperatura+" ºC\nHumedad: "+Humedad+" %\nLuz: "+Luminosidad+" %");	
 	}
 	
 	function initSize(){
@@ -184,15 +190,18 @@ function makeFaces(x, y, z, dPos){
 
 
 // CODIGO PARA SENSORES
-function dataCSensor(data, tt, id){
+function dataCSensor(data, tt, id, Data){
 	var cubos = sensorGroup.selectAll('g.sensor').data(data, function(d){ return d.id });
+	
 	var cu = cubos
 		.enter()
 		.append('g')
 		.attr('class', 'sensor')
 		.attr('fill', d3.rgb(255,84,14) ) // Relleno del cubo: ninguno
 		.attr('stroke', d3.rgb(255,84,14) )// Color de los bordes: negro
-		.attr('id', id)
+		.attr('id', id+" "+Data)
+		.attr('name', Data)
+
 		.merge(cubos);
 
 	var faces = cubos.merge(cu).selectAll('path.cara').data(function(d){ return d.faces; }, function(d){ return d.face; });
@@ -208,13 +217,20 @@ function dataCSensor(data, tt, id){
 	faces.exit().remove();}
 	
 function initSensor(id, posX, posY, posZ, radio){
+	// SE GENERAN VALORES ALEATORIOS QUE SERAN ASIGNADOS A CADA SENSOR
+	var Temperatura = Math.floor(Math.random() * 100) + 1;
+	var Humedad = Math.floor(Math.random() * 100) + 1;
+	var Luminosidad = Math.floor(Math.random() * 100) + 1;
+	var Data = Temperatura+" "+Humedad+" "+Luminosidad;
+	
 	// leSensor = [];
 	var _cubo = makeSensor(posX, posY, posZ, radio);
 		_cubo.id = 'sensor' + id;
 		_cubo.height = radio;
 		_cubo.width = radio;
+		_cubo.name = Data;
 		leSensor.push(_cubo);
-	dataCSensor(cubes3D(leSensor), 1000);}
+	dataCSensor(cubes3D(leSensor), 1000, _cubo.id,_cubo.name);}
 
 function makeSensor(x, y, z, radio){
 	return [
