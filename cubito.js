@@ -7,10 +7,10 @@ var sensorGroup = svg.append('g').attr('class', 'sensores');
 var mx, my, mouseX, mouseY;
 nPos = [250,320,600] // Posiciones x,y,z
 
-$( document ).ready(function() {	// INICIALIZA FUNCIONES AL CARGAR LA PÁGINA, LAS PREPARA PARA EJECUTARSE
-	$('.sensor').click(informe);	// MUESTRA LA INFORMACION DE LOS SENSORES
-	$('#nInfo').click(initSize);	// CAMBIA LAS DIMENSIONES DEL VISOR
-	$("#botonreiniciar").click(reiniciaPos);	// BOTON PARA REINICIAR LA POSICION DEL CUBO (VISOR)
+$( document ).ready(function() {
+	$('.sensor').click(informe);
+	$('#nInfo').click(initSize);
+	$("#botonreiniciar").click(reiniciaPos);
 
 	function informe(){
 		var id = this.id;
@@ -19,8 +19,9 @@ $( document ).ready(function() {	// INICIALIZA FUNCIONES AL CARGAR LA PÁGINA, L
 		var Temperatura = data[1];
 		var Humedad = data[2];
 		var Luminosidad = data[3];
-
-		alert("ID Sensor: "+idSensor+"\nTemperatura: "+Temperatura+" ºC\nHumedad: "+Humedad+" %\nLuz: "+Luminosidad+" %");	
+		$("#infoSensor").html("<div class='alert alert-info'><h4>Temperatura: "+Temperatura+" ºC<br>Humedad: "+Humedad+" %<br>Luz: "+Luminosidad+" %</h4></div>");
+		$("#dataSensor").modal("show");
+		//alert("ID Sensor: "+idSensor+"\nTemperatura: "+Temperatura+" ºC\nHumedad: "+Humedad+" %\nLuz: "+Luminosidad+" %");	
 	}
 	
 	function initSize(){
