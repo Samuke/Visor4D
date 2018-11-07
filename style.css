@@ -1,7 +1,8 @@
 html, body{height:100%;}
 body{margin:0;line-height:0;}
 figure{margin:0;}
-.vCubo{background-color:white;height:83%;width:95%;} /* Estilo del cubo */
+label{margin-bottom:1em;}
+.vCubo{background-color:white;height:83%;width:100%;} /* Estilo del cubo */
 .linT{align-items:center;background-color:#aeaeae;display:flex;height:20%;padding:0 1.5em;width:calc(100% - 3em);} /* DIV comentado - sin uso */
 .play{background-color:#2e2e2e;border:none;border-radius:100%;cursor:pointer;font-size:0;height:50px;margin-right:20px;width:50px;}
 .play:hover{background-color:#787878;}
@@ -19,4 +20,7 @@ figure{margin:0;}
 #botoninfo, #botonalerta, #botonvariables, #botonmodal{
 	margin-bottom: 17px;
 }
-.lt{botton-top:130px;background-color:rgba(0,0,0,0.3);height:60px;border-radius:20px;}
+.lt{background-color:rgba(0,0,0,0.3);height:60px;border-radius:20px;}
+.linea{align-items:center;display:flex;height:15%;}
+.linea h2{font-size:1.5em;}
+.btnsCentrales{position:absolute;width:100%;bottom:15%;}

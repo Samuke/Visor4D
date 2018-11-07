@@ -1,6 +1,5 @@
-var origin = [400, 300], scale = 10, cubesData = [], sensorData = [], alpha = 0, beta = 0, startAngle = Math.PI/6;
-var svg    = d3.select('.vCubo').call(d3.drag().on('drag', dragged).on('start', dragStart).on('end', dragEnd)).append('g')
-// var svg2   = d3.select('.vCubo').append('s');
+var origin = [400, 300], scale = 10, cubesData = [], sensorData = [], leSensor = [], alpha = 0, beta = 0, startAngle = Math.PI/6;
+var svg    = d3.select('.vCubo').call(d3.drag().on('drag', dragged).on('start', dragStart).on('end', dragEnd)).append('g');
 var cubesGroup = svg.append('g').attr('class', 'cubes');
 var carasPrisma = svg.append('g').attr('class', 'caras');
 var nodeSensor = svg.append('g').attr('class', 'caras');
@@ -11,6 +10,7 @@ nPos = [250,320,600] // Posiciones x,y,z
 $( document ).ready(function() {
 	$('.sensor').click(informe);
 	$('#nInfo').click(initSize);
+	$("#botonreiniciar").click(reiniciaPos);
 
 	function informe(){
 		var id = this.id;
@@ -26,7 +26,6 @@ $( document ).ready(function() {
 	}
 });
 
-
 var cubes3D = d3._3d()
 	.shape('CUBE')
 	.x(function(d){ return d.x; })
@@ -37,7 +36,6 @@ var cubes3D = d3._3d()
 	.origin(origin);
 
 function processData(data, tt){
-	console.log("processData");
 	/* --------- CUBES ---------*/
 	var cubes = cubesGroup.selectAll('g.cube').data(data, function(d){ return d.id });
 
@@ -67,14 +65,13 @@ function processData(data, tt){
 	faces.exit().remove();}
 
 function dataFaces(data, tt){
-	console.log("dataFaces");
 	var cubos = carasPrisma.selectAll('g.caras').data(data, function(d){ return d.id });
 
 	var cu = cubos
 		.enter()
 		.append('g')
 		.attr('class', 'caras')
-		.attr('fill', d3.rgb(127, 140, 141)) // Relleno del cubo: ninguno		.attr('stroke', d3.rgb(0,0,0) ) //color de los bordes: rojo
+		.attr('fill', d3.rgb(127, 140, 141)) //.attr('stroke', d3.rgb(0,0,0) )
 		.attr('stroke', d3.rgb(0,0,0) ) // Color de los bordes: negros
 		.merge(cubos);
 
@@ -91,12 +88,10 @@ function dataFaces(data, tt){
 		.merge(faces)
 		.transition().duration(tt)
 		.attr('d', cubes3D.draw);
-	 
 }
 
 
 function init(alto, largo, ancho){
-	console.log("init");
 	cubesData = [];
 	var _cube = makeCube(alto, largo, ancho);
 		_cube.id = 'cube_1';
@@ -105,7 +100,6 @@ function init(alto, largo, ancho){
 }
 
 function initFaces(id, posX, posY, posZ){  // Creacion caras del prisma.
-	console.log("initFaces");
 	sensorData = [];                        
 	for(var i = 0; i < 3; i++){ // FOR PARA CREAR LAS 3 CARAS NECESARIAS EN EL GRAFICO
 		if(i == 0){ 			// ARREGLO nPos SON LAS DIMENSIONES EN PX DEL PRISMA, ESTA CREADA AL COMIENZO.
@@ -140,14 +134,20 @@ function dragged(){
 	beta   = (d3.event.x - mx + mouseX) * Math.PI / 230 ;
 	alpha  = (d3.event.y - my + mouseY) * Math.PI / 230  * (-1);
 	processData(cubes3D.rotateY(beta + startAngle).rotateX(alpha - startAngle)(cubesData), 0);
+	dataCSensor(cubes3D.rotateY(beta + startAngle).rotateX(alpha - startAngle)(leSensor), 0);
 	dataFaces(cubes3D.rotateY(beta + startAngle).rotateX(alpha - startAngle)(sensorData), 0);}
 
 function dragEnd(){
 	mouseX = d3.event.x - mx + mouseX;
 	mouseY = d3.event.y - my + mouseY;}
 
+function reiniciaPos(){
+	beta=0;alpha=0;mouseX=0;mouseY=0;
+	processData(cubes3D.rotateY(beta + startAngle).rotateX(alpha - startAngle)(cubesData), 0);
+	dataCSensor(cubes3D.rotateY(beta + startAngle).rotateX(alpha - startAngle)(leSensor), 0);
+	dataFaces(cubes3D.rotateY(beta + startAngle).rotateX(alpha - startAngle)(sensorData), 0);}
+
 function makeCube(alto, largo, ancho){
-	console.log("makeCube");
 	al = alto/2;
 	la = largo/2;
 	an = ancho/2;
@@ -167,8 +167,7 @@ function makeCube(alto, largo, ancho){
 }
 
 function makeFaces(x, y, z, dPos){
-	console.log("makeFaces");
-	var regresa = [
+	return [
 		{x: x - dPos[0], y: y + dPos[1], z: z + dPos[2]}, // Parte Frente - Arriba izquierda
 		{x: x - dPos[0], y: y - dPos[1], z: z + dPos[2]}, // Parte Frente - Abajo izquierda
 		
@@ -181,21 +180,18 @@ function makeFaces(x, y, z, dPos){
 		{x: x + dPos[0], y: y - dPos[1], z: z - dPos[2]}, // Parte Atras - Abajo derecha
 		{x: x + dPos[0], y: y + dPos[1], z: z - dPos[2]}, // Parte Atras - Arriba derecha
 	];
-	console.log(regresa);
-	return regresa;
 }
 
 
 // CODIGO PARA SENSORES
 function dataCSensor(data, tt, id){
-	console.log("dataCSensor");
 	var cubos = sensorGroup.selectAll('g.sensor').data(data, function(d){ return d.id });
 	var cu = cubos
 		.enter()
 		.append('g')
 		.attr('class', 'sensor')
-		.attr('fill', 'none') // Relleno del cubo: ninguno
-		.attr('stroke', d3.rgb(0,0,0) )// Color de los bordes: rojo
+		.attr('fill', d3.rgb(255,84,14) ) // Relleno del cubo: ninguno
+		.attr('stroke', d3.rgb(255,84,14) )// Color de los bordes: negro
 		.attr('id', id)
 		.merge(cubos);
 
@@ -203,8 +199,8 @@ function dataCSensor(data, tt, id){
 	faces.enter()
 		.append('path')
 		.attr('class', 'cara')
-		.attr('fill-opacity', 0.5)
-		.attr('stroke-width', 3)
+		.attr('fill-opacity', 0.3)
+		.attr('stroke-width', 1.5)
 		.classed('le_3d', true)
 		.merge(faces)
 		.transition().duration(tt)
@@ -212,13 +208,13 @@ function dataCSensor(data, tt, id){
 	faces.exit().remove();}
 	
 function initSensor(id, posX, posY, posZ, radio){
-	sensorData = [];
+	// leSensor = [];
 	var _cubo = makeSensor(posX, posY, posZ, radio);
 		_cubo.id = 'sensor' + id;
 		_cubo.height = radio;
 		_cubo.width = radio;
-		sensorData.push(_cubo);
-	dataCSensor(cubes3D(sensorData), 1000, _cubo.id);}
+		leSensor.push(_cubo);
+	dataCSensor(cubes3D(leSensor), 1000);}
 
 function makeSensor(x, y, z, radio){
 	return [
@@ -237,8 +233,8 @@ function makeSensor(x, y, z, radio){
 }
 
 function initallsensor(){
-	aSensor = [[1,10,10,10,5],[2,20,20,20,5],[3,30,30,30,5],[4,40,40,40,5],[5,50,50,50,5]];
-	for(var i=0; i<5;i++){
+	aSensor = [[1,-180,150,10,5],[2,20,110,120,5],[3,-30,30,30,5],[4,40,-140,40,5],[5,250,-120,-50,5]];
+	for(var i=0;i<5;i++){
 		initSensor(aSensor[i][0],aSensor[i][1],aSensor[i][2],aSensor[i][3],aSensor[i][4]);
 	}
 }
