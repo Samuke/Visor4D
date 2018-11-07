@@ -7,10 +7,10 @@ var sensorGroup = svg.append('g').attr('class', 'sensores');
 var mx, my, mouseX, mouseY;
 nPos = [250,320,600] // Posiciones x,y,z
 
-$( document ).ready(function() {
-	$('.sensor').click(informe);
-	$('#nInfo').click(initSize);
-	$("#botonreiniciar").click(reiniciaPos);
+$( document ).ready(function() {	// INICIALIZA FUNCIONES AL CARGAR LA PÁGINA, LAS PREPARA PARA EJECUTARSE
+	$('.sensor').click(informe);	// MUESTRA LA INFORMACION DE LOS SENSORES
+	$('#nInfo').click(initSize);	// CAMBIA LAS DIMENSIONES DEL VISOR
+	$("#botonreiniciar").click(reiniciaPos);	// BOTON PARA REINICIAR LA POSICION DEL CUBO (VISOR)
 
 	function informe(){
 		var id = this.id;
