@@ -6,7 +6,7 @@ var carasPrisma = svg.append('g').attr('class', 'caras');
 var nodeSensor = svg.append('g').attr('class', 'caras');
 var sensorGroup = svg.append('g').attr('class', 'sensores');
 var mx, my, mouseX, mouseY;
-nPos = [250,320,600] // x,y,z
+nPos = [250,320,600] // Posiciones x,y,z
 
 $( document ).ready(function() {
 	$('.sensor').click(informe);
@@ -14,7 +14,7 @@ $( document ).ready(function() {
 
 	function informe(){
 		var id = this.id;
-		alert("ID NODO: "+ id +"\nT : 24ºC \nH : 50% \nL : 10%");
+		alert("ID NODO: "+ id +"\nT : 24ºC \nH : 50% \nL : 10%"); // Temperatura, Humedad, Luminosidad 
 	}
 	
 	function initSize(){
@@ -45,8 +45,8 @@ function processData(data, tt){
 		.enter()
 		.append('g')
 		.attr('class', 'cube')
-		.attr('fill', 'none')//relleno del cubo: ninguno
-		.attr('stroke', d3.rgb(0,0,0) )//color de los bordes: negros
+		.attr('fill', 'none') // Relleno del cubo: ninguno
+		.attr('stroke', d3.rgb(0,0,0) ) // Color de los bordes: negros
 		.merge(cubes);
 
 	cubes.exit().remove();
@@ -74,8 +74,8 @@ function dataFaces(data, tt){
 		.enter()
 		.append('g')
 		.attr('class', 'caras')
-		.attr('fill', d3.rgb(127, 140, 141))//relleno del cubo: ninguno		.attr('stroke', d3.rgb(0,0,0) )//color de los bordes: rojo
-		.attr('stroke', d3.rgb(0,0,0) )//color de los bordes: negros
+		.attr('fill', d3.rgb(127, 140, 141)) // Relleno del cubo: ninguno		.attr('stroke', d3.rgb(0,0,0) ) //color de los bordes: rojo
+		.attr('stroke', d3.rgb(0,0,0) ) // Color de los bordes: negros
 		.merge(cubos);
 
 	cubos.exit().remove();
@@ -86,7 +86,7 @@ function dataFaces(data, tt){
 		.append('path')
 		.attr('class', 'cara')
 		.attr('fill-opacity', 0.12) // OPACIDAD CARAS DEL PRISMA 
-		.attr('stroke-width', 0.1)
+		.attr('stroke-width', 0.1) // ANCHURA DE COLOR (stroke) 
 		.classed('le_3d', true)
 		.merge(faces)
 		.transition().duration(tt)
@@ -107,10 +107,10 @@ function init(alto, largo, ancho){
 function initFaces(id, posX, posY, posZ){  // Creacion caras del prisma.
 	console.log("initFaces");
 	sensorData = [];                        
-	for(var i = 0; i < 3; i++){ //FOR PARA CREAR LAS 3 CARAS NECESARIAS EN EL GRAFICO
-		if(i == 0){ 			//ARREGLO nPos SON LAS DIMENSIONES EN PX DEL PRISMA, ESTA CREADA AL COMIENZO.
-			nDraw = [posZ/2,0,posX/2]    //ARREGLO DONDE SE PASA DIMENSIONES X,Y,Z PARA UTILIZARLO EN makeFaces.
-			var _cubo = makeFaces(0,posY/2, 0, nDraw); //CARA DE BASE.
+	for(var i = 0; i < 3; i++){ // FOR PARA CREAR LAS 3 CARAS NECESARIAS EN EL GRAFICO
+		if(i == 0){ 			// ARREGLO nPos SON LAS DIMENSIONES EN PX DEL PRISMA, ESTA CREADA AL COMIENZO.
+			nDraw = [posZ/2,0,posX/2]    // ARREGLO DONDE SE PASA DIMENSIONES X,Y,Z PARA UTILIZARLO EN makeFaces.
+			var _cubo = makeFaces(0,posY/2, 0, nDraw); // CARA DE BASE.
 				_cubo.id = 'cara' + 1;
 				sensorData.push(_cubo);
 		}
@@ -122,7 +122,7 @@ function initFaces(id, posX, posY, posZ){  // Creacion caras del prisma.
 		}
 		if(i == 2){ 	
 			nDraw = [posZ/2,posY/2,0]
-			var _cubo = makeFaces(0,0,-posX/2, nDraw); //CARA FONDO.
+			var _cubo = makeFaces(0,0,-posX/2, nDraw); // CARA FONDO.
 				_cubo.id = 'cara' + 3;
 				sensorData.push(_cubo);
 		}
@@ -152,34 +152,34 @@ function makeCube(alto, largo, ancho){
 	la = largo/2;
 	an = ancho/2;
 	return [
-		{x: 0 - la, y: al, z: 0 + an}, // FRONT TOP LEFT
-		{x: 0 - la, y: -al, z: 0 + an}, // FRONT BOTTOM LEFT
+		{x: 0 - la, y: al, z: 0 + an}, // Parte Frente - Arriba izquierda
+		{x: 0 - la, y: -al, z: 0 + an}, // Parte Frente - Abajo izquierda
 		
-		{x: 0 + la, y: -al, z: 0 + an}, // FRONT BOTTOM RIGHT
-		{x: 0 + la, y: al, z: 0 + an}, // FRONT TOP RIGHT
+		{x: 0 + la, y: -al, z: 0 + an}, // Parte Frente - Abajo derecha
+		{x: 0 + la, y: al, z: 0 + an}, // Parte Frente - Arriba derecha
 		
-		{x: 0 - la, y: al, z: 0 - an}, // BACK  TOP LEFT
-		{x: 0 - la, y: -al, z: 0 - an}, // BACK  BOTTOM LEFT
+		{x: 0 - la, y: al, z: 0 - an}, // Parte Atras - Arriba izquierda
+		{x: 0 - la, y: -al, z: 0 - an}, // Parte Atras - Abajo izquierda
 		
-		{x: 0 + la, y: -al, z: 0 - an}, // BACK  BOTTOM RIGHT
-		{x: 0 + la, y: al, z: 0 - an}, // BACK  TOP RIGHT
+		{x: 0 + la, y: -al, z: 0 - an}, // Parte Atras - Abajo derecha
+		{x: 0 + la, y: al, z: 0 - an}, // Parte Atras - Arriba derecha
 	];
 }
 
 function makeFaces(x, y, z, dPos){
 	console.log("makeFaces");
 	var regresa = [
-		{x: x - dPos[0], y: y + dPos[1], z: z + dPos[2]}, // FRONT TOP LEFT
-		{x: x - dPos[0], y: y - dPos[1], z: z + dPos[2]}, // FRONT BOTTOM LEFT
+		{x: x - dPos[0], y: y + dPos[1], z: z + dPos[2]}, // Parte Frente - Arriba izquierda
+		{x: x - dPos[0], y: y - dPos[1], z: z + dPos[2]}, // Parte Frente - Abajo izquierda
 		
-		{x: x + dPos[0], y: y - dPos[1], z: z + dPos[2]}, // FRONT BOTTOM RIGHT
-		{x: x + dPos[0], y: y + dPos[1], z: z + dPos[2]}, // FRONT TOP RIGHT
+		{x: x + dPos[0], y: y - dPos[1], z: z + dPos[2]}, // Parte Frente - Abajo derecha
+		{x: x + dPos[0], y: y + dPos[1], z: z + dPos[2]}, // Parte Frente - Arriba derecha
 		
-		{x: x - dPos[0], y: y + dPos[1], z: z - dPos[2]}, // BACK  TOP LEFT
-		{x: x - dPos[0], y: y - dPos[1], z: z - dPos[2]}, // BACK  BOTTOM LEFT
+		{x: x - dPos[0], y: y + dPos[1], z: z - dPos[2]}, // Parte Atras - Arriba izquierda
+		{x: x - dPos[0], y: y - dPos[1], z: z - dPos[2]}, // Parte Atras - Abajo izquierda
 		
-		{x: x + dPos[0], y: y - dPos[1], z: z - dPos[2]}, // BACK  BOTTOM RIGHT
-		{x: x + dPos[0], y: y + dPos[1], z: z - dPos[2]}, // BACK  TOP RIGHT
+		{x: x + dPos[0], y: y - dPos[1], z: z - dPos[2]}, // Parte Atras - Abajo derecha
+		{x: x + dPos[0], y: y + dPos[1], z: z - dPos[2]}, // Parte Atras - Arriba derecha
 	];
 	console.log(regresa);
 	return regresa;
@@ -194,8 +194,8 @@ function dataCSensor(data, tt, id){
 		.enter()
 		.append('g')
 		.attr('class', 'sensor')
-		.attr('fill', 'none')//relleno del cubo: ninguno
-		.attr('stroke', d3.rgb(0,0,0) )//color de los bordes: rojo
+		.attr('fill', 'none') // Relleno del cubo: ninguno
+		.attr('stroke', d3.rgb(0,0,0) )// Color de los bordes: rojo
 		.attr('id', id)
 		.merge(cubos);
 
@@ -222,17 +222,17 @@ function initSensor(id, posX, posY, posZ, radio){
 
 function makeSensor(x, y, z, radio){
 	return [
-		{x: x - radio, y: y + radio, z: z + radio}, // FRONT TOP LEFT
-		{x: x - radio, y: y - radio, z: z + radio}, // FRONT BOTTOM LEFT
+		{x: x - radio, y: y + radio, z: z + radio}, // Parte frente - Arriba izquierda
+		{x: x - radio, y: y - radio, z: z + radio}, // Parte frente - Abajo izquierda
 		
-		{x: x + radio, y: y - radio, z: z + radio}, // FRONT BOTTOM RIGHT
-		{x: x + radio, y: y + radio, z: z + radio}, // FRONT TOP RIGHT
+		{x: x + radio, y: y - radio, z: z + radio}, // Parte frente - Abajo derecha
+		{x: x + radio, y: y + radio, z: z + radio}, // Parte frente - Arriba derecha
 		
-		{x: x - radio, y: y + radio, z: z - radio}, // BACK  TOP LEFT
-		{x: x - radio, y: y - radio, z: z - radio}, // BACK  BOTTOM LEFT
+		{x: x - radio, y: y + radio, z: z - radio}, // Parte atras - Arriba izquierda
+		{x: x - radio, y: y - radio, z: z - radio}, // Parte atras - Abajo izquierda
 		
-		{x: x + radio, y: y - radio, z: z - radio}, // BACK  BOTTOM RIGHT
-		{x: x + radio, y: y + radio, z: z - radio}, // BACK  TOP RIGHT
+		{x: x + radio, y: y - radio, z: z - radio}, // Parte atras - Abajo derecha
+		{x: x + radio, y: y + radio, z: z - radio}, // Parte atras - Arriba derecha
 	];
 }
 
