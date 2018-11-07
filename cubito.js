@@ -3,8 +3,18 @@ var svg    = d3.select('.vCubo').call(d3.drag().on('drag', dragged).on('start', 
 // var svg2   = d3.select('.vCubo').append('s');
 var cubesGroup = svg.append('g').attr('class', 'cubes');
 var carasPrisma = svg.append('g').attr('class', 'caras');
+var nodeSensor = svg.append('g').attr('class', 'caras');
 var mx, my, mouseX, mouseY;
-nPos = [320,600,250]
+nPos = [250,320,600] // x,y,z
+
+$('#nInfo').click(function () {
+    var x = $("#nAncho").val();
+    var y = $("#nAlto").val();
+    var z = $("#nLargo").val();
+    nPos=[x*30,y*30,z*30];
+    initFaces(1,nPos[0],nPos[1],nPos[2]);
+});
+
 
 var cubes3D = d3._3d()
 	.shape('CUBE')
@@ -70,9 +80,9 @@ function dataFaces(data, tt){
 		.merge(faces)
 		.transition().duration(tt)
 		.attr('d', cubes3D.draw);
-
-	faces.exit().remove();
+	 
 }
+
 
 function init(alto, largo, ancho){
 	console.log("init");
@@ -88,20 +98,20 @@ function initFaces(id, posX, posY, posZ){  // Creacion caras del prisma.
 	sensorData = [];                        
 	for(var i = 0; i < 3; i++){ //FOR PARA CREAR LAS 3 CARAS NECESARIAS EN EL GRAFICO
 		if(i == 0){ 			//ARREGLO nPos SON LAS DIMENSIONES EN PX DEL PRISMA, ESTA CREADA AL COMIENZO.
-			nDraw = [nPos[1]/2,0,nPos[2]/2]    //ARREGLO DONDE SE PASA DIMENSIONES X,Y,Z PARA UTILIZARLO EN makeFaces.
-			var _cubo = makeFaces(0,nPos[0]/2, 0, nDraw); //CARA DE BASE.
+			nDraw = [posZ/2,0,posX/2]    //ARREGLO DONDE SE PASA DIMENSIONES X,Y,Z PARA UTILIZARLO EN makeFaces.
+			var _cubo = makeFaces(0,posY/2, 0, nDraw); //CARA DE BASE.
 				_cubo.id = 'cara' + 1;
 				sensorData.push(_cubo);
 		}
 		if(i == 1){ 	
-			nDraw = [0,nPos[0]/2,nPos[2]/2]   
-			var _cubo = makeFaces(nPos[1]/2,0, 0, nDraw); // CARA DERECHA.
+			nDraw = [0,posY/2,posX/2]   
+			var _cubo = makeFaces(posZ/2,0, 0, nDraw); // CARA DERECHA.
 				_cubo.id = 'cara' + 2;
 				sensorData.push(_cubo);
 		}
 		if(i == 2){ 	
-			nDraw = [nPos[1]/2,nPos[0]/2,0]
-			var _cubo = makeFaces(0,0,-nPos[2]/2, nDraw); //CARA FONDO.
+			nDraw = [posZ/2,posY/2,0]
+			var _cubo = makeFaces(0,0,-posX/2, nDraw); //CARA FONDO.
 				_cubo.id = 'cara' + 3;
 				sensorData.push(_cubo);
 		}
@@ -163,9 +173,8 @@ function makeFaces(x, y, z, dPos){
 	console.log(regresa);
 	return regresa;
 }
-
 init(320, 600, 250);
-initFaces();
+initFaces(1,nPos[0],nPos[1],nPos[2]);
 
 //Si quieren probar otras dimensiones cambiar valores del init, 
 // y poner los mismos valores en arreglo nPos al comienzo.

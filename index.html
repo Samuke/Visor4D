@@ -18,15 +18,46 @@ $(document).ready(function(){
 </script>
 </head>
 <body>
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- CONTENIDO MDOAL -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Ingresar dimensiones prisma.</h4>
+      </div>
+      <div class="modal-body">
+          <div class="form-group">
+            <label>Ancho(m)</label>
+            <input id="nAncho"class="form-control" type="text"></input>
+        </div>
+        <div class="form-group">
+            <label>Alto(m)</label>
+            <input id="nAlto" class="form-control" type="text"></input>
+        </div>
+        <div class="form-group">
+            <label>Largo(m)</label>
+            <input id="nLargo" class="form-control" type="text"></input>
+        </div>
+      <button type="submit" onclick="getXyz()" id="nInfo" class="btn btn-default">Aceptar</button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 <svg class="vCubo" id="chart" width="800" height="600" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">
 </svg>
 
 <!-- barra de temperatura -->
-<img src="temp.png" align="right" id="tempe" style="width:50px;height:680px;">	
+<img src="temp.png" align="right" id="tempe" style="width:50px;height:680px;">  
 
 <!-- medidor de temperatura svg -->
 <svg class="medidor" style="width: 250px;padding:50px;position: absolute;" viewBox="-10 1 160 100"> 
-<defs>																       <!-- tamaño/posicion medidor -->
+<defs>                                       <!-- tamaño/posicion medidor -->
   <path d="M 49.9 99
            A 49 49 0 1 1 49.9 1
            L 49.9 31
@@ -90,28 +121,29 @@ $(document).ready(function(){
 <line x1="50" y1="25" x2="50" y2="-0.1" stroke="red" stroke-width="0.8" transform="rotate(110  50 50)" clip-path="url(#clipmitadderecha)" />
 </svg>
 
-
 <script src="cubito.js"></script>
 
 <div class="text-center">
-	<button type="button" class="btn btn-success" data-placement="top" id="botoninfo" data-toggle="popover" title="INFORMACION" data-content="Aquí veras las alertas">VER INFO.CUBO</button>
+  <button type="button" class="btn btn-success" data-toggle="modal" id="botonmodal" data-target="#myModal">CONFIGURAR PRISMA</button>
+  
+  <button type="button" class="btn btn-success" data-placement="top" id="botoninfo" data-toggle="popover" title="INFORMACION" data-content="Aquí veras las alertas">VER INFO.CUBO</button>
 
-	<button type="button" class="btn btn-danger" data-placement="top" id="botonalerta" data-toggle="popover" title="ALERTAS" data-content="Aquí veras las alertas">VER ALERTAS</button>
+  <button type="button" class="btn btn-danger" data-placement="top" id="botonalerta" data-toggle="popover" title="ALERTAS" data-content="Aquí veras las alertas">VER ALERTAS</button>
 
-	<button type="button" class="btn btn-primary" data-placement="top" id="botonvariables" data-toggle="popover" title="VARIABLES" data-content="Aquí veras las alertas">VER VARIABLES</button>
+  <button type="button" class="btn btn-primary" data-placement="top" id="botonvariables" data-toggle="popover" title="VARIABLES" data-content="Aquí veras las alertas">VER VARIABLES</button>
 </div>
 
 <!-- <div class="linT">
-	<button class="play"></button>
-	<div class="barra">
-		<div class="progreso"></div>
-	</div>
+  <button class="play"></button>
+  <div class="barra">
+    <div class="progreso"></div>
+  </div>
 </div> -->
 
 <div>
-	<div class="col-md-1"></div>
+  <div class="col-md-1"></div>
     <div class="col-md-10 lt">
-    	<h2><i class="fas fa-play"></i></h2>
+      <h2><i class="fas fa-play"></i></h2>
     </div>
     <div class="col-md-1"></div>
 </div>

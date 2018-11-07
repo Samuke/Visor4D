@@ -23,8 +23,7 @@ body {
   left:-300px;
   border: 3px solid black;
 }
-#botoninfo, #botonalerta, #botonvariables{
+#botoninfo, #botonalerta, #botonvariables, #botonmodal{
 	margin-bottom: 17px;
 }
-
 .lt{botton-top:130px;background-color:rgba(0,0,0,0.3);height:60px;border-radius:20px;}
