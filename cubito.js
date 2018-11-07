@@ -4,15 +4,26 @@ var svg    = d3.select('.vCubo').call(d3.drag().on('drag', dragged).on('start', 
 var cubesGroup = svg.append('g').attr('class', 'cubes');
 var carasPrisma = svg.append('g').attr('class', 'caras');
 var nodeSensor = svg.append('g').attr('class', 'caras');
+var sensorGroup = svg.append('g').attr('class', 'sensores');
 var mx, my, mouseX, mouseY;
 nPos = [250,320,600] // x,y,z
 
-$('#nInfo').click(function () {
-    var x = $("#nAncho").val();
-    var y = $("#nAlto").val();
-    var z = $("#nLargo").val();
-    nPos=[x*30,y*30,z*30];
-    initFaces(1,nPos[0],nPos[1],nPos[2]);
+$( document ).ready(function() {
+	$('.sensor').click(informe);
+	$('#nInfo').click(initSize);
+
+	function informe(){
+		var id = this.id;
+		alert("ID NODO: "+ id +"\nT : 24ºC \nH : 50% \nL : 10%");
+	}
+	
+	function initSize(){
+		var x = $("#nAncho").val();
+		var y = $("#nAlto").val();
+		var z = $("#nLargo").val();
+		nPos=[x*30,y*30,z*30];
+		initFaces(1,nPos[0],nPos[1],nPos[2]);
+	}
 });
 
 
@@ -173,7 +184,69 @@ function makeFaces(x, y, z, dPos){
 	console.log(regresa);
 	return regresa;
 }
+
+
+// CODIGO PARA SENSORES
+function dataCSensor(data, tt, id){
+	console.log("dataCSensor");
+	var cubos = sensorGroup.selectAll('g.sensor').data(data, function(d){ return d.id });
+	var cu = cubos
+		.enter()
+		.append('g')
+		.attr('class', 'sensor')
+		.attr('fill', 'none')//relleno del cubo: ninguno
+		.attr('stroke', d3.rgb(0,0,0) )//color de los bordes: rojo
+		.attr('id', id)
+		.merge(cubos);
+
+	var faces = cubos.merge(cu).selectAll('path.cara').data(function(d){ return d.faces; }, function(d){ return d.face; });
+	faces.enter()
+		.append('path')
+		.attr('class', 'cara')
+		.attr('fill-opacity', 0.5)
+		.attr('stroke-width', 3)
+		.classed('le_3d', true)
+		.merge(faces)
+		.transition().duration(tt)
+		.attr('d', cubes3D.draw);
+	faces.exit().remove();}
+	
+function initSensor(id, posX, posY, posZ, radio){
+	sensorData = [];
+	var _cubo = makeSensor(posX, posY, posZ, radio);
+		_cubo.id = 'sensor' + id;
+		_cubo.height = radio;
+		_cubo.width = radio;
+		sensorData.push(_cubo);
+	dataCSensor(cubes3D(sensorData), 1000, _cubo.id);}
+
+function makeSensor(x, y, z, radio){
+	return [
+		{x: x - radio, y: y + radio, z: z + radio}, // FRONT TOP LEFT
+		{x: x - radio, y: y - radio, z: z + radio}, // FRONT BOTTOM LEFT
+		
+		{x: x + radio, y: y - radio, z: z + radio}, // FRONT BOTTOM RIGHT
+		{x: x + radio, y: y + radio, z: z + radio}, // FRONT TOP RIGHT
+		
+		{x: x - radio, y: y + radio, z: z - radio}, // BACK  TOP LEFT
+		{x: x - radio, y: y - radio, z: z - radio}, // BACK  BOTTOM LEFT
+		
+		{x: x + radio, y: y - radio, z: z - radio}, // BACK  BOTTOM RIGHT
+		{x: x + radio, y: y + radio, z: z - radio}, // BACK  TOP RIGHT
+	];
+}
+
+function initallsensor(){
+	aSensor = [[1,10,10,10,5],[2,20,20,20,5],[3,30,30,30,5],[4,40,40,40,5],[5,50,50,50,5]];
+	for(var i=0; i<5;i++){
+		initSensor(aSensor[i][0],aSensor[i][1],aSensor[i][2],aSensor[i][3],aSensor[i][4]);
+	}
+}
+
+// FIN CODIGO DE SENSORES
+
 init(320, 600, 250);
+initallsensor();
 initFaces(1,nPos[0],nPos[1],nPos[2]);
 
 //Si quieren probar otras dimensiones cambiar valores del init, 
