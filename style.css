@@ -1,7 +1,7 @@
 html, body{height:100%;}
 body{margin:0;line-height:0;}
 figure{margin:0;}
-.vCubo{background-color:white;height:83%;width:100%;}
+.vCubo{background-color:white;height:83%;width:95%;}
 .linT{align-items:center;background-color:#aeaeae;display:flex;height:20%;padding:0 1.5em;width:calc(100% - 3em);}
 .play{background-color:#2e2e2e;border:none;border-radius:100%;cursor:pointer;font-size:0;height:50px;margin-right:20px;width:50px;}
 .play:hover{background-color:#787878;}
@@ -18,9 +18,9 @@ body {
 
 /* barra de temp */
 #tempe{
-  position: relative;
-  top:-750px;
-  left:-300px;
+  position: absolute;
+  top: 22%;
+  right: 15px;
   border: 3px solid black;
 }
 #botoninfo, #botonalerta, #botonvariables, #botonmodal{
