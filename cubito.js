@@ -12,7 +12,7 @@ $( document ).ready(function() {
 	$('#nInfo').click(initSize);
 	$("#botonreiniciar").click(reiniciaPos);
 
-	function informe(){
+	function informe(){ //muestra datos de los sensores
 		var id = this.id;
 		var data = id.split(" ");
 		var idSensor = data[0];
@@ -31,7 +31,7 @@ $( document ).ready(function() {
 		nPos=[x*30,y*30,z*30];
 		initFaces(1,nPos[0],nPos[1],nPos[2]);
 	}
-});
+});         
 
 var cubes3D = d3._3d()
 	.shape('CUBE')
@@ -43,7 +43,7 @@ var cubes3D = d3._3d()
 	.origin(origin);
 
 
-function dataFaces(data, tt){
+function dataFaces(data, tt){ //atributos de las caras del cubo
 	var cubos = carasPrisma.selectAll('g.caras').data(data, function(d){ return d.id });
 
 	var cu = cubos
@@ -94,6 +94,8 @@ function initFaces(id, posX, posY, posZ){  // Creacion caras del prisma.
 	dataFaces(cubes3D(sensorData), 1000);
 }
 
+// FUNCIONES PARA PODER GIRAR/ROTAR EL CUBO
+
 function dragStart(){
 	mx = d3.event.x;
 	my = d3.event.y;}
@@ -117,25 +119,6 @@ function reiniciaPos(){
 	dataCSensor(cubes3D.rotateY(beta + startAngle).rotateX(alpha - startAngle)(leSensor), 0);
 	dataFaces(cubes3D.rotateY(beta + startAngle).rotateX(alpha - startAngle)(sensorData), 0);}
 
-function makeCube(alto, largo, ancho){
-	al = alto/2;
-	la = largo/2;
-	an = ancho/2;
-	return [
-		{x: 0 - la, y: al, z: 0 + an}, // Parte Frente - Arriba izquierda
-		{x: 0 - la, y: -al, z: 0 + an}, // Parte Frente - Abajo izquierda
-		
-		{x: 0 + la, y: -al, z: 0 + an}, // Parte Frente - Abajo derecha
-		{x: 0 + la, y: al, z: 0 + an}, // Parte Frente - Arriba derecha
-		
-		{x: 0 - la, y: al, z: 0 - an}, // Parte Atras - Arriba izquierda
-		{x: 0 - la, y: -al, z: 0 - an}, // Parte Atras - Abajo izquierda
-		
-		{x: 0 + la, y: -al, z: 0 - an}, // Parte Atras - Abajo derecha
-		{x: 0 + la, y: al, z: 0 - an}, // Parte Atras - Arriba derecha
-	];
-}
-
 function makeFaces(x, y, z, dPos){
 	return [
 		{x: x - dPos[0], y: y + dPos[1], z: z + dPos[2]}, // Parte Frente - Arriba izquierda
@@ -152,9 +135,8 @@ function makeFaces(x, y, z, dPos){
 	];
 }
 
-
 // CODIGO PARA SENSORES
-function dataCSensor(data, tt, id, Data){
+function dataCSensor(data, tt, id, Data){ //ATRIBUTOS DE SENSORES
 	var cubos = sensorGroup.selectAll('g.sensor').data(data, function(d){ return d.id });
 	
 	var cu = cubos
@@ -196,7 +178,7 @@ function initSensor(id, posX, posY, posZ, radio){
 		leSensor.push(_cubo);
 	dataCSensor(cubes3D(leSensor), 1000, _cubo.id,_cubo.name);}
 
-function makeSensor(x, y, z, radio){
+function makeSensor(x, y, z, radio){ //CREACION DE LAS CARAS DEL PRISMA
 	return [
 		{x: x - radio, y: y + radio, z: z + radio}, // Parte frente - Arriba izquierda
 		{x: x - radio, y: y - radio, z: z + radio}, // Parte frente - Abajo izquierda
@@ -212,7 +194,7 @@ function makeSensor(x, y, z, radio){
 	];
 }
 
-function initallsensor(){
+function initallsensor(){ // POSICIONA TODOS LOS SENSORES EN EL VISOR (CUBO)
 	aSensor = [[1,-180,150,10,5],[2,20,110,120,5],[3,-30,30,30,5],[4,40,-140,40,5],[5,250,-120,-50,5]];
 	for(var i=0;i<5;i++){
 		initSensor(aSensor[i][0],aSensor[i][1],aSensor[i][2],aSensor[i][3],aSensor[i][4]);
@@ -225,5 +207,5 @@ function initallsensor(){
 initallsensor();
 initFaces(1,nPos[0],nPos[1],nPos[2]);
 
-//Si quieren probar otras dimensiones cambiar valores del init, 
+// Si quieren probar otras dimensiones cambiar valores del init, 
 // y poner los mismos valores en arreglo nPos al comienzo.
