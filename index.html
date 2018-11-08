@@ -66,8 +66,10 @@ $(document).ready(function(){
 	</div>
 </div>
 
-
-<span style="position:absolute;top:1.5em;"><button type="button" id="botonreiniciar" class="btn btn-secondary">Reiniciar Posición</button></span><!-- data-target="#myModal"-->
+<span style="position:absolute;top:1.5em;max-width:5em;">
+	<button type="button" id="botonreiniciar" class="btn btn-secondary">Reiniciar Posición</button>
+	<button id="MuestraDatosJSON" class="btn btn-primary"style="margin-top:0.5em;">Mostrar datos JSON</button>
+</span>
 <svg class="vCubo" id="chart" width="800" height="600" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">
 	<img src="temp.png" class="img-responsive" align="" id="tempe" style="width:20px;height:40%;">  
 </svg>
@@ -86,5 +88,6 @@ $(document).ready(function(){
 	</div>
 	<div class="col-md-1"></div>
 </div>
+<div id="datos" style="line-height:1em;"></div>
 </body>
 </html>

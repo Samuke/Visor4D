@@ -21,7 +21,7 @@ $( document ).ready(function() {
 		var Luminosidad = data[3];
 		$("#infoSensor").html("<div class='alert alert-info'><h4>Temperatura: "+Temperatura+" ºC<br>Humedad: "+Humedad+" %<br>Luz: "+Luminosidad+" %</h4></div>");
 		$("#dataSensor").modal("show");
-		//alert("ID Sensor: "+idSensor+"\nTemperatura: "+Temperatura+" ºC\nHumedad: "+Humedad+" %\nLuz: "+Luminosidad+" %");	
+		//alert("ID Sensor: "+idSensor+"\nTemperatura: "+Temperatura+" ?C\nHumedad: "+Humedad+" %\nLuz: "+Luminosidad+" %");	
 	}
 	
 	function initSize(){
@@ -209,3 +209,16 @@ initFaces(1,nPos[0],nPos[1],nPos[2]);
 
 // Si quieren probar otras dimensiones cambiar valores del init, 
 // y poner los mismos valores en arreglo nPos al comienzo.
+
+// ==========================================================
+// === DATOS DE LOS SENSORES ================================
+$("#MuestraDatosJSON").click(ObtieneDatos);
+function ObtieneDatos(){
+	$.getJSON('https://spreadsheets.google.com/feeds/list/1DH9h8ZMBNLyW-WatGSSRdsBHFh6lQr0oa17ZU_AfZrU/od6/public/values?alt=json', function(data){
+		$("#datos").append("<h2>Informacion recolectada de JSON</h2>");
+		info = data.feed.entry;//obtiene toda la informacion del json.
+		$(info).each(function(){//recorre cada fila de datos.
+			$("#datos").append("<p><b>Fecha:</b> "+ this.gsx$fecha.$t +" <b>Hora:</b> "+ this.gsx$hora.$t +" <b>Mac Concentrador:</b> "+ this.gsx$macconcentrador.$t +" <b>Mac Nodo:</b> "+ this.gsx$macnodo.$t +" <b>px:</b> "+ this.gsx$px.$t +" <b>py:</b> "+ this.gsx$py.$t +" <b>pz:</b> "+this.gsx$pz.$t +" <b>tp:</b> "+ this.gsx$tp.$t +" <b>hr:</b> "+ this.gsx$hr.$t +" <b>hs:</b> "+this.gsx$hs.$t +" <b>lu:</b> "+ this.gsx$lu.$t +" <b>al:</b> "+ this.gsx$al.$t +"</p>");
+		});
+	});
+}
