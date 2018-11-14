@@ -3,13 +3,13 @@
 <head>
 <title>Visor</title>
 <meta charset="UTF-8"/>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<script src="https://unpkg.com/d3-3d/build/d3-3d.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
-<link rel="stylesheet" href="style.css">
+<script src="./librerias/jquery-3.3.1.min.js"></script>
+<script src="./librerias/d3.v4.min.js"></script>
+<script src="./librerias/d3-3d.min.js"></script>
+<script src="./librerias/bootstrap.min.js"></script>
+<link rel="stylesheet" href="./librerias/bootstrap.min.css"/><!-- integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
+<link rel="stylesheet" href="./librerias/all.css"/><!-- integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">-->
+<link rel="stylesheet" href="style.css"/>
 <!--<link rel="stylesheet" href="" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">-->
 <script>
 $(document).ready(function(){
@@ -18,9 +18,9 @@ $(document).ready(function(){
 </script>
 </head>
 <body>
-<div id="myModal" class="modal fade" role="dialog">
+<!--</body><div id="myModal" class="modal fade" role="dialog">
 	<div class="modal-dialog">
-		<!-- CONTENIDO MODAL -->
+		<!-- CONTENIDO MODAL --
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -46,7 +46,7 @@ $(document).ready(function(){
 			</div>
 		</div>
 	</div>
-</div>
+</div>-->
 
 <div id="dataSensor" class="modal fade" role="dialog">
 	<div class="modal-dialog">
@@ -76,7 +76,7 @@ $(document).ready(function(){
 <!-- barra de temperatura -->
 <script src="cubito.js"></script>
 <div class="text-center btnsCentrales">
-	<button type="button" class="btn btn-success" data-toggle="modal" id="botonmodal" data-target="#myModal">CONFIGURAR PRISMA</button>
+	<!--<button type="button" class="btn btn-success" data-toggle="modal" id="botonmodal" data-target="#myModal">CONFIGURAR PRISMA</button>-->
 	<button type="button" class="btn btn-success" data-placement="top" id="botoninfo" data-toggle="popover" title="INFORMACION" data-content="Aquí verás la información">VER INFO.CUBO</button>
 	<button type="button" class="btn btn-danger" data-placement="top" id="botonalerta" data-toggle="popover" title="ALERTAS" data-content="Aquí verás las alertas">VER ALERTAS</button>
 	<button type="button" class="btn btn-primary" data-placement="top" id="botonvariables" data-toggle="popover" title="VARIABLES" data-content="Aquí verás las variables">VER VARIABLES</button>
