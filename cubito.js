@@ -150,7 +150,14 @@ function dataCSensor(data, tt, id, Data){ //ATRIBUTOS DE SENSORES
 		.on('click',function(){
 			var id = this.id;
 			var infoAct = (document.getElementById(id).getAttribute("name"));
-			alert(infoAct);
+			var data = infoAct.split(" ");
+			$('#infoSensor').html(" ");
+			$('#infoSensor').append("<i class='fab fa-slack-hash'></i> "+data[0]+"<hr>");
+			$('#infoSensor').append("<i class='fas fa-thermometer-half'></i> "+data[4]+"<small>ºC </small><hr>");
+			$('#infoSensor').append("<i class='fas fa-water'></i> "+data[5]+"<small>% Humedad Relativa</small><hr>");
+			$('#infoSensor').append("<i class='fas fa-water'></i> "+data[6]+"<small>% Humedad Suelo</small><hr>");
+			$('#infoSensor').append("<i class='far fa-lightbulb'></i> "+data[7] + "% Luz");
+			$('#dataSensor').modal('show');	
 		})
 		.merge(cubos);
 
