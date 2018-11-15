@@ -145,9 +145,13 @@ function dataCSensor(data, tt, id, Data){ //ATRIBUTOS DE SENSORES
 		.attr('class', 'sensor')
 		.attr('fill', d3.rgb(255,84,14) ) // Relleno del cubo: ninguno
 		.attr('stroke', d3.rgb(255,84,14) )// Color de los bordes: negro
-		.attr('id', id+" "+Data)
+		.attr('id', id)
 		.attr('name', Data)
-
+		.on('click',function(){
+			var id = this.id;
+			var infoAct = (document.getElementById(id).getAttribute("name"));
+			alert(infoAct);
+		})
 		.merge(cubos);
 
 	var faces = cubos.merge(cu).selectAll('path.cara').data(function(d){ return d.faces; }, function(d){ return d.face; });
@@ -160,23 +164,23 @@ function dataCSensor(data, tt, id, Data){ //ATRIBUTOS DE SENSORES
 		.merge(faces)
 		.transition().duration(tt)
 		.attr('d', cubes3D.draw);
-	faces.exit().remove();}
+	faces.exit().remove();
+}
+
 	
-function initSensor(id, posX, posY, posZ, radio){
-	// SE GENERAN VALORES ALEATORIOS QUE SERAN ASIGNADOS A CADA SENSOR
-	var Temperatura = Math.floor(Math.random() * 100) + 1;
-	var Humedad = Math.floor(Math.random() * 100) + 1;
-	var Luminosidad = Math.floor(Math.random() * 100) + 1;
-	var Data = Temperatura+" "+Humedad+" "+Luminosidad;
+function initSensor(id, posX, posY, posZ, Temperatura, Humedad_Rel, Humedad_Suelo, Luz ,radio){
 	
+	var Data = id+" "+posX+" "+posY+" "+posZ+" "+Temperatura+" "+Humedad_Rel+" "+Humedad_Suelo+" "+Luz;
+	console.log(Data);
 	// leSensor = [];
 	var _cubo = makeSensor(posX, posY, posZ, radio);
-		_cubo.id = 'sensor' + id;
+		_cubo.id = id;
 		_cubo.height = radio;
 		_cubo.width = radio;
 		_cubo.name = Data;
 		leSensor.push(_cubo);
-	dataCSensor(cubes3D(leSensor), 1000, _cubo.id,_cubo.name);}
+	dataCSensor(cubes3D(leSensor), 1000, _cubo.id,_cubo.name);
+}
 
 function makeSensor(x, y, z, radio){ //CREACION DE LAS CARAS DEL PRISMA
 	return [
@@ -194,11 +198,40 @@ function makeSensor(x, y, z, radio){ //CREACION DE LAS CARAS DEL PRISMA
 	];
 }
 
+
 function initallsensor(){ // POSICIONA TODOS LOS SENSORES EN EL VISOR (CUBO)
-	aSensor = [[1,-180,150,10,5],[2,20,110,120,5],[3,-30,30,30,5],[4,40,-140,40,5],[5,250,-120,-50,5]];
-	for(var i=0;i<5;i++){
-		initSensor(aSensor[i][0],aSensor[i][1],aSensor[i][2],aSensor[i][3],aSensor[i][4]);
-	}
+	var Digital=new Date();
+	var hora_actual=Digital.getHours();
+	var aDataid = [];
+	var aDataSensor = [];
+	// PRIMERO RESCATAREMOS LAS IDS QUE LLEGAN DE LOS NODOS EN EL JSON
+	$.getJSON('https://spreadsheets.google.com/feeds/list/1DH9h8ZMBNLyW-WatGSSRdsBHFh6lQr0oa17ZU_AfZrU/od6/public/values?alt=json', function(data){
+		info = data.feed.entry;//obtiene toda la informacion del json.
+		$(info).each(function(){
+			
+			//recorre cada fila de datos.
+			if(aDataid.indexOf(this.gsx$macnodo.$t)==-1){
+				aDataid.push(this.gsx$macnodo.$t);
+			}	
+		});
+
+		//PARA CADA ID DEL ARRAY, SE GUARDARAN EN OTRO ARRAY LOS DATOS EN LA HORA ACTUAL. (NO DIA).
+		for(var i=0; i < aDataid.length ; i++){
+			$(info).each(function(){
+				var ax = (this.gsx$hora.$t).split(":");
+				if(this.gsx$macnodo.$t == aDataid[i] && ax[0] == hora_actual){
+					aDataSensor = [aDataid[i],Math.floor((Math.random() * 100) + 1),Math.floor((Math.random() * 100) + 1),Math.floor((Math.random() * 100) + 1),this.gsx$tp.$t,this.gsx$hr.$t,this.gsx$hs.$t,this.gsx$lu.$t]
+					// MODIFICAR LOS RANDOM X Y Z, CONVERTIR LA CANTIDAD RESCATADA EN METROS
+					// this.gsx$px.$t this.gsx$y.$t  this.gsx$pz.$t 
+					// --------------------------------------------------------------------
+					initSensor(aDataSensor[0],aDataSensor[1],aDataSensor[2],aDataSensor[3],aDataSensor[4],aDataSensor[5],aDataSensor[6],aDataSensor[7],5);
+					
+				}
+			})
+		}
+
+	
+	});
 }
 
 // FIN CODIGO DE SENSORES
@@ -212,7 +245,7 @@ initFaces(1,nPos[0],nPos[1],nPos[2]);
 
 // ==========================================================
 // === DATOS DE LOS SENSORES ================================
-$("#MuestraDatosJSON").click(ObtieneDatos);
+/** $("#MuestraDatosJSON").click(ObtieneDatos);
 function ObtieneDatos(){
 	//$.getJSON('https://spreadsheets.google.com/feeds/list/1DH9h8ZMBNLyW-WatGSSRdsBHFh6lQr0oa17ZU_AfZrU/od6/public/values?alt=json', function(data){//MODO ONLINE
 	$.getJSON('values.json', function(data){//MODO OFFLINE
@@ -223,3 +256,4 @@ function ObtieneDatos(){
 		});
 	});
 }
+*/
