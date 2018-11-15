@@ -12,8 +12,8 @@ nPos = [(metrosAncho*60),(metrosAlto*60),(metrosLargo*60)] // Posiciones x,y,z
 
 $( document ).ready(function() {
 	$('.sensor').click(informe);
-	$('#nInfo').click(initSize);
 	$("#botonreiniciar").click(reiniciaPos);
+	$("#playButton").click(testx);
 
 	function informe(){ //muestra datos de los sensores
 		var id = this.id;
@@ -48,7 +48,6 @@ var cubes3D = d3._3d()
 
 function dataFaces(data, tt){ //atributos de las caras del cubo
 	var cubos = carasPrisma.selectAll('g.caras').data(data, function(d){ return d.id });
-
 	var cu = cubos
 		.enter()
 		.append('g')
@@ -71,6 +70,7 @@ function dataFaces(data, tt){ //atributos de las caras del cubo
 		.transition().duration(tt)
 		.attr('d', cubes3D.draw);
 }
+
 
 function initFaces(id, posX, posY, posZ){  // Creacion caras del prisma.
 	sensorData = [];                        
@@ -139,15 +139,36 @@ function makeFaces(x, y, z, dPos){
 }
 
 // CODIGO PARA SENSORES
-function dataCSensor(data, tt, id, Data){ //ATRIBUTOS DE SENSORES
+function dataCSensor(data, tt, id, Data,tp,hr){ //ATRIBUTOS DE SENSORES
 	var cubos = sensorGroup.selectAll('g.sensor').data(data, function(d){ return d.id });
+	var color;
+	if(tp<0){
+        console.log(tp);
+        color = d3.rgb(0,0,255);
+    }
+    if(tp>0 && tp<=5){
+        console.log(tp);
+        color = d3.rgb(0,255,255);
+    }
+    if(tp>5 && tp<=15){
+        console.log(tp);
+        color = d3.rgb(0,255,0);
+    }
+    if(tp>15 && tp<=25){
+        console.log(tp);
+        color = d3.rgb(255,255,0);
+    }
+    if(tp>25){
+        console.log(tp);
+        color = d3.rgb(255,0,0);
+    }
 	
 	var cu = cubos
 		.enter()
 		.append('g')
 		.attr('class', 'sensor')
-		.attr('fill', d3.rgb(255,84,14) ) // Relleno del cubo: ninguno
-		.attr('stroke', d3.rgb(255,84,14) )// Color de los bordes: negro
+		.attr('fill', color ) // Relleno del cubo: ninguno
+		.attr('stroke',color )// Color de los bordes: negro
 		.attr('id', id)
 		.attr('name', Data)
 		.on('click',function(){
@@ -179,7 +200,7 @@ function dataCSensor(data, tt, id, Data){ //ATRIBUTOS DE SENSORES
 
 	
 function initSensor(id, posX, posY, posZ, Temperatura, Humedad_Rel, Humedad_Suelo, Luz ,radio){
-	
+	var tp = Temperatura.replace(",",".");
 	var Data = id+" "+posX+" "+posY+" "+posZ+" "+Temperatura+" "+Humedad_Rel+" "+Humedad_Suelo+" "+Luz;
 	console.log(Data);
 	// leSensor = [];
@@ -189,7 +210,7 @@ function initSensor(id, posX, posY, posZ, Temperatura, Humedad_Rel, Humedad_Suel
 		_cubo.width = radio;
 		_cubo.name = Data;
 		leSensor.push(_cubo);
-	dataCSensor(cubes3D(leSensor), 1000, _cubo.id,_cubo.name);
+	dataCSensor(cubes3D(leSensor), 1000, _cubo.id,_cubo.name,tp,Humedad_Rel);
 }
 
 function makeSensor(x, y, z, radio){ //CREACION DE LAS CARAS DEL PRISMA
@@ -244,6 +265,10 @@ function initallsensor(){ // POSICIONA TODOS LOS SENSORES EN EL VISOR (CUBO)
 	});
 }
 
+function testx(){
+		alert("d");
+}
+
 // FUNCION SOLO UTILIZADA PARA CAMBIAR COMA POR PUNTO DE LA POSICION Z
 function adaptZ(posZ){
 	var newPos = posZ.replace(",", ".");
@@ -251,8 +276,6 @@ function adaptZ(posZ){
 }
 
 // FIN CODIGO DE SENSORES
-
-
 
 initallsensor();
 initFaces(1,nPos[0],nPos[1],nPos[2]);
