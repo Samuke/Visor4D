@@ -237,6 +237,7 @@ function initallsensor(){ // POSICIONA TODOS LOS SENSORES EN EL VISOR (CUBO)
 	var aDataid = [];
 	var aDataSensor = [];
 	var AlertasTemps = [];
+	var ArrayAlertas = [];
 	// PRIMERO RESCATAREMOS LAS IDS QUE LLEGAN DE LOS NODOS EN EL JSON
 	$.getJSON('https://spreadsheets.google.com/feeds/list/1DH9h8ZMBNLyW-WatGSSRdsBHFh6lQr0oa17ZU_AfZrU/od6/public/values?alt=json', function(data){
 		info = data.feed.entry;//obtiene toda la informacion del json.
@@ -262,15 +263,21 @@ function initallsensor(){ // POSICIONA TODOS LOS SENSORES EN EL VISOR (CUBO)
 
 					if((aDataSensor[4])>"1"){
 						console.log("Demasiada Temperatura");
-						AlertasTemps.push(aDataSensor[0],aDataSensor[4]);
+						AlertasTemps.push([aDataSensor[0],aDataSensor[4]]);
 					}	
 				}
 			})
 		}
-		console.log(AlertasTemps);
+		console.log(AlertasTemps.length);
+
+		for(var i=0; i < AlertasTemps.length ; i++){
+			ArrayAlertas.push("<div>"+"El sensor "+"<b>"+AlertasTemps[i][0]+"</b>"+" alcanzó "+"<b>"+AlertasTemps[i][1]+"</b>"+" grados"+"</div>");
+		}
+
+		console.log(ArrayAlertas);
 
 		if((document.getElementById('muestrasensoralerta').innerHTML = AlertasTemps[0]) != undefined){
-			document.getElementById('muestrasensoralerta').innerHTML = "El sensor "+"<b>"+AlertasTemps[0]+"</b>"+" alcanzó "+"<b>"+AlertasTemps[1]+"</b>"+" grados";
+			document.getElementById('muestrasensoralerta').innerHTML = ArrayAlertas.join("");
 			//document.getElementByClassName('popover-body')[0].style.visibility = 'hidden';
 		} else {
 			document.getElementById('muestrasensoralerta').innerHTML = "No hay alertas";
