@@ -258,19 +258,23 @@ function initallsensor(){ // POSICIONA TODOS LOS SENSORES EN EL VISOR (CUBO)
 					// this.gsx$px.$t this.gsx$y.$t  this.gsx$pz.$t 
 					// --------------------------------------------------------------------
 					initSensor(aDataSensor[0],aDataSensor[1],aDataSensor[2],aDataSensor[3],aDataSensor[4],aDataSensor[5],aDataSensor[6],aDataSensor[7],5);
-					console.log("Nodo "+i+":",aDataSensor[5]+" Grados")
+					console.log("Nodo "+i+":",aDataSensor[4]+" Grados")
 
-					if((aDataSensor[5])>"40"){
+					if((aDataSensor[4])>"1"){
 						console.log("Demasiada Temperatura");
-						AlertasTemps.push(aDataSensor[0],aDataSensor[5]);
+						AlertasTemps.push(aDataSensor[0],aDataSensor[4]);
 					}	
 				}
 			})
 		}
 		console.log(AlertasTemps);
 
-		document.getElementById('muestrasensoralerta').innerHTML = AlertasTemps[0];
-		document.getElementById('muestratempalerta').innerHTML = AlertasTemps[1];
+		if((document.getElementById('muestrasensoralerta').innerHTML = AlertasTemps[0]) != undefined){
+			document.getElementById('muestrasensoralerta').innerHTML = "El sensor "+"<b>"+AlertasTemps[0]+"</b>"+" alcanzó "+"<b>"+AlertasTemps[1]+"</b>"+" grados";
+			//document.getElementByClassName('popover-body')[0].style.visibility = 'hidden';
+		} else {
+			document.getElementById('muestrasensoralerta').innerHTML = "No hay alertas";
+		}
 		//for(var i=0; i < aDataSensor.length ; i++){
 		//	console.log(aDataSensor);
 		//};
