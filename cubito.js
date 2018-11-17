@@ -143,23 +143,23 @@ function dataCSensor(data, tt, id, Data,tp,hr){ //ATRIBUTOS DE SENSORES
 	var cubos = sensorGroup.selectAll('g.sensor').data(data, function(d){ return d.id });
 	var color;
 	if(tp<0){
-        console.log(tp);
+        //console.log(tp);
         color = d3.rgb(0,0,255);
     }
     if(tp>0 && tp<=5){
-        console.log(tp);
+        //console.log(tp);
         color = d3.rgb(0,255,255);
     }
     if(tp>5 && tp<=15){
-        console.log(tp);
+        //console.log(tp);
         color = d3.rgb(0,255,0);
     }
     if(tp>15 && tp<=25){
-        console.log(tp);
+        //console.log(tp);
         color = d3.rgb(255,255,0);
     }
     if(tp>25){
-        console.log(tp);
+        //console.log(tp);
         color = d3.rgb(255,0,0);
     }
 	
@@ -202,7 +202,8 @@ function dataCSensor(data, tt, id, Data,tp,hr){ //ATRIBUTOS DE SENSORES
 function initSensor(id, posX, posY, posZ, Temperatura, Humedad_Rel, Humedad_Suelo, Luz ,radio){
 	var tp = Temperatura.replace(",",".");
 	var Data = id+" "+posX+" "+posY+" "+posZ+" "+Temperatura+" "+Humedad_Rel+" "+Humedad_Suelo+" "+Luz;
-	console.log(Data);
+	//console.log(Data);
+
 	// leSensor = [];
 	var _cubo = makeSensor(posX, posY, posZ, radio);
 		_cubo.id = id;
@@ -235,6 +236,7 @@ function initallsensor(){ // POSICIONA TODOS LOS SENSORES EN EL VISOR (CUBO)
 	var hora_actual=Digital.getHours();
 	var aDataid = [];
 	var aDataSensor = [];
+	var AlertasTemps = [];
 	// PRIMERO RESCATAREMOS LAS IDS QUE LLEGAN DE LOS NODOS EN EL JSON
 	$.getJSON('https://spreadsheets.google.com/feeds/list/1DH9h8ZMBNLyW-WatGSSRdsBHFh6lQr0oa17ZU_AfZrU/od6/public/values?alt=json', function(data){
 		info = data.feed.entry;//obtiene toda la informacion del json.
@@ -256,12 +258,22 @@ function initallsensor(){ // POSICIONA TODOS LOS SENSORES EN EL VISOR (CUBO)
 					// this.gsx$px.$t this.gsx$y.$t  this.gsx$pz.$t 
 					// --------------------------------------------------------------------
 					initSensor(aDataSensor[0],aDataSensor[1],aDataSensor[2],aDataSensor[3],aDataSensor[4],aDataSensor[5],aDataSensor[6],aDataSensor[7],5);
-					
+					console.log("Nodo "+i+":",aDataSensor[5]+" Grados")
+
+					if((aDataSensor[5])>"40"){
+						console.log("Demasiada Temperatura");
+						AlertasTemps.push(aDataSensor[0],aDataSensor[5]);
+					}	
 				}
 			})
 		}
+		console.log(AlertasTemps);
 
-	
+		document.getElementById('muestrasensoralerta').innerHTML = AlertasTemps[0];
+		document.getElementById('muestratempalerta').innerHTML = AlertasTemps[1];
+		//for(var i=0; i < aDataSensor.length ; i++){
+		//	console.log(aDataSensor);
+		//};
 	});
 }
 

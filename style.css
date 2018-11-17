@@ -16,3 +16,4 @@ label{margin-bottom:1em;}
 .linea{align-items:center;display:flex;height:15%;}
 .linea h2{font-size:1.5em;}
 .btnsCentrales{position:absolute;width:100%;bottom:15%;}
+.popover{max-width: 100%}
