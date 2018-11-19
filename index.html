@@ -27,6 +27,7 @@ $(document).ready(function(){
     });
 });
 </script>
+
 <script>
 window.onload = function(){
     var testeo = "testeoxd";
@@ -65,19 +66,19 @@ window.onload = function(){
 	</div>
 </div>-->
 
-<div id="dataSensor" class="modal fade" role="dialog">
-	<div class="modal-dialog">
+
+
+<div id="dataSensor" class="popover" data-toggle="popover" role="dialog" data-placement="bottom";>
+	<div class="popover-dialog">
 		<!-- CONTENIDO MODAL -->
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Información de Sensor</h4>
+		<div class="popover-header">
+			<button type="button" class="close" data-dismiss="modal" >&times;</button>
+			<h4 class>Informacion de Sensor</h4>
 			</div>
-			<div class="modal-body" id="infoSensor">
-				
+			<div class="popover-body" id="infoSensor">		
 			</div>
-			<div class="modal-footer">
-			<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+			<div class="popover-footer">
+			<button type="button" id="botonclose" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
 			</div>
 		</div>
 	</div>
@@ -148,5 +149,6 @@ window.onload = function(){
 	<div class="col-md-1"></div>
 </div>
 <div id="datos" style="line-height:1em;"></div>
+
 </body>
 </html>

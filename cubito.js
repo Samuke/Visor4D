@@ -181,7 +181,8 @@ function dataCSensor(data, tt, id, Data,tp,hr){ //ATRIBUTOS DE SENSORES
 			$('#infoSensor').append("<i class='fas fa-water'></i> "+data[5]+"<small>% Humedad Relativa</small><hr>");
 			$('#infoSensor').append("<i class='fas fa-water'></i> "+data[6]+"<small>% Humedad Suelo</small><hr>");
 			$('#infoSensor').append("<i class='far fa-lightbulb'></i> "+data[7] + "% Luz");
-			$('#dataSensor').modal('show');	
+			$('#dataSensor').modal('show');
+			$('.modal-backdrop').removeClass("modal-backdrop");  // REMOVER OSCURECIMIENTO DEL MODAL 	
 		})
 		.merge(cubos);
 

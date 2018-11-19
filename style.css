@@ -9,12 +9,13 @@ label{margin-bottom:1em;}
 .play:before{border-bottom:10px solid transparent;border-left:10px solid white;border-right:10px solid transparent;border-top:10px solid transparent;content:'';height:10px;width:10px;margin-left:calc(50% - 5px);}
 .barra{background-color:#868686;border-radius:100px;height:0.8em;overflow:hidden;width:100%;}
 .progreso{background-color:#4e4eff;height:100%;width:0;}
-/* Barra de Temperatura */
 #tempe{position:absolute;top:22%;right:15px;border:3px solid black;}
 #botoninfo, #botonalerta, #botonvariables, #botonmodal{margin-bottom:17px;}
+#botonclose{width: 65px; height: 30px;}
 .lt{background-color:rgba(0,0,0,0.3);height:60px;border-radius:20px;width:100%;}
 .linea{align-items:center;display:flex;height:15%;}
 .linea h2{font-size:1.5em;}
 .btnsCentrales{position:absolute;width:100%;bottom:15%;}
-.popover{max-width: 100%}
+.popover{max-width: 10%}
 #muestrasensoralerta{text-decoration:none; color:black}
+
