@@ -11,12 +11,10 @@ label{margin-bottom:1em;}
 .progreso{background-color:#4e4eff;height:100%;width:0;}
 #tempe{position:absolute;top:22%;right:15px;border:3px solid black;}
 #botoninfo, #botonalerta, #botonvariables, #botonmodal{margin-bottom:17px;}
-#botonclose{width: 65px; height: 30px;}
 .lt{background-color:rgba(0,0,0,0.3);height:60px;border-radius:20px;width:100%;}
 .linea{align-items:center;display:flex;height:15%;}
 .linea h2{font-size:1.5em;}
 .btnsCentrales{position:absolute;width:100%;bottom:15%;}
-.popover{max-width: 100%}
+.popover{max-width: 15%;}  /* Maximo anchura popovers */
 #muestrasensoralerta,#muestrainfonodos{text-decoration:none; color:black}
 #popoverinfonodos{position: absolute}
-

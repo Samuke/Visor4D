@@ -15,6 +15,7 @@
 $(document).ready(function(){
     $('[data-toggle="popover"]').popover({
     	html: "true",
+    	container: 'body',
 	  	content: function() {
 	    	var content = $(this).attr("data-popover-content");
 	    	return $(content).children(".popover-body").html();
@@ -30,7 +31,7 @@ $(document).ready(function(){
 </head>
 <body>
 
-<!--POPOVER INFO NODOS-->
+<!-- POPOVER INFO NODOS-->
 
 <div 	id="popoverinfonodos"
 		data-toggle="popover"
@@ -45,8 +46,59 @@ $(document).ready(function(){
 	<div class="popover-body" id="muestrainfonodos"></div>
 </div>
 
-<!--POPOVER INFO NODOS-->
-<span style="position:absolute;left:1.5em;top:1.5em;max-width:8em;">
+<!-- POPOVERS VARIABLES DE NODOS -->
+
+<div class="hidden" id="poptemp">
+		<div class="popover-heading"
+			 data-placement="right">
+			<b>TEMPERATURA</b>
+		</div>
+		<div class="popover-body"
+		     id="muestratemp">
+	    </div>
+</div>
+
+<div class="hidden" id="pophumedadre">
+		<div class="popover-heading"
+			 data-placement="right">
+			<b>HUMEDAD RELATIVA</b>
+		</div>
+		<div class="popover-body"
+		     id="muestrahumedadre">
+	    </div>
+</div>
+
+<div class="hidden" id="pophumedadsu">
+		<div class="popover-heading"
+			 data-placement="right">
+			<b>HUMEDAD SUELO</b>
+		</div>
+		<div class="popover-body"
+		     id="muestrahumedadsu">
+	    </div>
+</div>
+
+<div class="hidden" id="poplumi">
+		<div class="popover-heading"
+			 data-placement="right">
+			<b>LUMINOSIDAD</b>
+		</div>
+		<div class="popover-body"
+		     id="muestraluminosidad">
+	    </div>
+</div>
+
+<div class="hidden" id="mypop">
+		<div class="popover-heading"
+			 data-placement="right">
+			<b>ALERTAS</b>
+		</div>
+		<div class="popover-body">
+		    <a id="muestrasensoralerta"></a>
+	    </div>
+</div>
+
+<span style="position:absolute;left:0.5em;top:1.5em;max-width:15em;">
 <div class="btn-group-vertical">
 	<button type="button" class="btn btn-default" id="botonreiniciar" style="margin-bottom:1em;width: 12em;"><b>Reiniciar<br>Posición</b></button>
 	
@@ -58,36 +110,20 @@ $(document).ready(function(){
 			data-toggle="popover"
 			data-placement="right"
 			data-popover-content="#poptemp">
-			VER TEMPERATURA
+			TEMPERATURA
 	</button>
 
-	<div class="hidden" id="poptemp">
-		<div class="popover-heading"
-			 data-placement="right">
-			<b>TEMPERATURA</b>
-		</div>
-		<div class="popover-body"
-		    <a id="muestratemp"></a>
-	    </div>
-	</div>
-
 	<!--BOTONES CON POPOVER (HUMEDAD RELATIVA)-->
+
 	<button type="button" 
+			style="background-color: #009900;"
 			class="btn btn-primary"
-			style="width:12em;background-color: #009900;"
 			id="botonhumedadre"
 			data-toggle="popover"
+			data-placement="right"
 			data-popover-content="#pophumedadre">
 			HUMEDAD RELATIVA
 	</button>
-	<div class="hidden" id="pophumedadre">
-		<div class="popover-heading">
-			<b>HUMEDAD RELATIVA</b>
-		</div>
-		<div class="popover-body">
-		    <a id="muestrahumedadre"></a>
-	    </div>
-	</div>
 
 	<!--BOTONES CON POPOVER (HUMEDAD DE SUELO)-->
 	<button type="button" 
@@ -95,17 +131,10 @@ $(document).ready(function(){
 			style="background-color:#994c00"
 			id="botonhumedadsu"
 			data-toggle="popover"
+			data-placement="right"
 			data-popover-content="#pophumedadsu">
 			HUMEDAD SUELO
 	</button>
-	<div class="hidden" id="pophumedadsu">
-		<div class="popover-heading">
-			<b>HUMEDAD SUELO</b>
-		</div>
-		<div class="popover-body">
-		    <a id="muestrahumedadsu"></a>
-	    </div>
-	</div>
 
 	<!--BOTONES CON POPOVER (LUMINOSIDAD)-->
 	<button type="button" 
@@ -113,17 +142,10 @@ $(document).ready(function(){
 			style="background-color:#9933ff;"
 			id="botonluminosidad"
 			data-toggle="popover"
+			data-placement="right"
 			data-popover-content="#poplumi">
 			LUMINOSIDAD
 	</button>
-	<div class="hidden" id="poplumi">
-		<div class="popover-heading">
-			<b>LUMINOSIDAD</b>
-		</div>
-		<div class="popover-body">
-		    <a id="muestraluminosidad"></a>
-	    </div>
-	</div>
 </div>
 </span>
 
@@ -157,14 +179,6 @@ $(document).ready(function(){
 			VER ALERTAS
 	</button>
 
-	<div class="hidden" id="mypop">
-		<div class="popover-heading">
-			<b>ALERTAS</b>
-		</div>
-		<div class="popover-body">
-		    <a id="muestrasensoralerta"></a>
-	    </div>
-	</div>
 
 	<!--BOTONES CON POPOVER VARIABLES (DESCARTADO)
 	<button type="button" 
