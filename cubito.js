@@ -9,11 +9,22 @@ var metrosAncho = 5;
 var metrosLargo = 7;
 var metrosAlto = 4;
 nPos = [(metrosAncho*60),(metrosAlto*60),(metrosLargo*60)] // Posiciones x,y,z
-
+var horasPlayer = []
+var dataPlayer = [];
 $( document ).ready(function() {
+	$.getJSON('https://spreadsheets.google.com/feeds/list/1DH9h8ZMBNLyW-WatGSSRdsBHFh6lQr0oa17ZU_AfZrU/od6/public/values?alt=json', function(data){
+		info = data.feed.entry;//obtiene toda la informacion del json.
+		$(info).each(function(){//recorre cada fila de datos.
+			var hora = this.gsx$hora.$t;
+			if(horasPlayer.indexOf(this.gsx$hora.$t)==-1){
+				horasPlayer.push(hora);
+			}
+			dataPlayer.push([this.gsx$macnodo.$t,-(nPos[2]/2)+(adaptZ(this.gsx$pz.$t)),(nPos[1]/2)-(this.gsx$py.$t*60),(-(nPos[0])/2)+(this.gsx$px.$t*60),this.gsx$tp.$t,this.gsx$hr.$t,this.gsx$hs.$t,this.gsx$lu.$t,this.gsx$hora.$t]);
+		});
+	});
 	$('.sensor').click(informe);
 	$("#botonreiniciar").click(reiniciaPos);
-	$("#playButton").click(testx);
+
 
 	function informe(){ //muestra datos de los sensores
 		var id = this.id;
@@ -35,6 +46,10 @@ $( document ).ready(function() {
 		initFaces(1,nPos[0],nPos[1],nPos[2]);
 	}
 });         
+
+function TESTING(){
+	$("#9999997").attr("stroke",d3.rgb(0,0,0));
+}
 
 var cubes3D = d3._3d()
 	.shape('CUBE')
@@ -138,10 +153,8 @@ function makeFaces(x, y, z, dPos){
 	];
 }
 
-// CODIGO PARA SENSORES
-function dataCSensor(data, tt, id, Data,tp,hr){ //ATRIBUTOS DE SENSORES
-	var cubos = sensorGroup.selectAll('g.sensor').data(data, function(d){ return d.id });
-	var color;
+
+function asgColor(tp){
 	if(tp<0){
         //console.log(tp);
         color = d3.rgb(0,0,255);
@@ -162,7 +175,14 @@ function dataCSensor(data, tt, id, Data,tp,hr){ //ATRIBUTOS DE SENSORES
         //console.log(tp);
         color = d3.rgb(255,0,0);
     }
-	
+    return color;
+}
+
+
+// CODIGO PARA SENSORES
+function dataCSensor(data, tt, id, Data,tp,hr){ //ATRIBUTOS DE SENSORES
+	var cubos = sensorGroup.selectAll('g.sensor').data(data, function(d){ return d.id });
+	var color = asgColor(tp); 
 	var cu = cubos
 		.enter()
 		.append('g')
@@ -240,7 +260,7 @@ function initallsensor(){ // POSICIONA TODOS LOS SENSORES EN EL VISOR (CUBO)
 	var AlertasTemps = [];
 	var ArrayAlertas = [];
 	// PRIMERO RESCATAREMOS LAS IDS QUE LLEGAN DE LOS NODOS EN EL JSON
-	$.getJSON('https://spreadsheets.google.com/feeds/list/1DH9h8ZMBNLyW-WatGSSRdsBHFh6lQr0oa17ZU_AfZrU/od6/public/values?alt=json', function(data){
+	$.getJSON('values.json', function(data){
 		info = data.feed.entry;//obtiene toda la informacion del json.
 		$(info).each(function(){
 			
@@ -289,8 +309,22 @@ function initallsensor(){ // POSICIONA TODOS LOS SENSORES EN EL VISOR (CUBO)
 	});
 }
 
-function testx(){
-		alert("d");
+function reproduceData(i){
+	if(i <= horasPlayer.length){ // Vamos recorriendo todas las horas de 0:00 hasta 0:00
+		for (var j = 0 ; j < dataPlayer.length; j++) { // Recorremos todos los datos
+			if(dataPlayer[j][8] == horasPlayer[i]){    // Y vemos en donde la hora de este NODO sea igual a la hora actual recorrida.
+				var tp = adaptZ(dataPlayer[j][4])/60;	// obtenemos la temperatura del arreglo donde tenemos toda la info.
+				var color = asgColor(tp);				
+				$("#"+dataPlayer[j][0]).attr("fill",color); 	//Graficamos el nodo segun temperatura de la hora 
+				$("#"+dataPlayer[j][0]).attr("stroke",color);	
+			}
+		}
+		console.log(horasPlayer[i])
+		i++;
+		setTimeout(function(){
+	        reproduceData(i);
+	    },1000);
+	}
 }
 
 // FUNCION SOLO UTILIZADA PARA CAMBIAR COMA POR PUNTO DE LA POSICION Z
@@ -303,6 +337,7 @@ function adaptZ(posZ){
 
 initallsensor();
 initFaces(1,nPos[0],nPos[1],nPos[2]);
+
 
 // Si quieren probar otras dimensiones cambiar valores del init, 
 // y poner los mismos valores en arreglo nPos al comienzo.
