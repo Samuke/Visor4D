@@ -275,6 +275,8 @@ function initallsensor(){ // POSICIONA TODOS LOS SENSORES EN EL VISOR (CUBO)
 	var aDataSensor = [];
 	var AlertasTemps = [];
 	var ArrayAlertas = [];
+	var VarTemperatura   = []; var VarHumedadRelativa   = [];    var VarHumedadSuelo      = []; var VarLuminosidad   = [];
+	var ArrayTemperatura = []; var ArrayHumedadRelativa = [];    var ArrayHumedadSuelo    = []; var ArrayLuminosidad = []; 
 	// PRIMERO RESCATAREMOS LAS IDS QUE LLEGAN DE LOS NODOS EN EL JSON
 	$.getJSON('values.json', function(data){
 		info = data.feed.entry;//obtiene toda la informacion del json.
@@ -298,6 +300,11 @@ function initallsensor(){ // POSICIONA TODOS LOS SENSORES EN EL VISOR (CUBO)
 					initSensor(aDataSensor[0],aDataSensor[1],aDataSensor[2],aDataSensor[3],aDataSensor[4],aDataSensor[5],aDataSensor[6],aDataSensor[7],5);
 					console.log("Nodo "+i+":",aDataSensor[4]+" Grados")
 
+					VarTemperatura.push		([aDataSensor[0],aDataSensor[4]]);
+					VarHumedadRelativa.push ([aDataSensor[0],aDataSensor[5]]);
+					VarHumedadSuelo.push	([aDataSensor[0],aDataSensor[6]]);
+					VarLuminosidad.push		([aDataSensor[0],aDataSensor[7]]);
+
 					if((aDataSensor[4])>"1"){
 						console.log("Demasiada Temperatura");
 						AlertasTemps.push([aDataSensor[0],aDataSensor[4]]);
@@ -305,6 +312,7 @@ function initallsensor(){ // POSICIONA TODOS LOS SENSORES EN EL VISOR (CUBO)
 				}
 			})
 		}
+
 		console.log(AlertasTemps.length);
 
 		for(var i=0; i < AlertasTemps.length ; i++){
@@ -322,6 +330,74 @@ function initallsensor(){ // POSICIONA TODOS LOS SENSORES EN EL VISOR (CUBO)
 		//for(var i=0; i < aDataSensor.length ; i++){
 		//	console.log(aDataSensor);
 		//};
+
+		// POP-OVER DE VARIABLES
+
+		// TEMPERATURA
+		console.log(VarTemperatura.length);
+
+		for(var i=0; i < VarTemperatura.length ; i++){
+			ArrayTemperatura.push("<div>"+"El sensor N° "+"<b>"+VarTemperatura[i][0]+"</b>"+" tiene una Temperatura de "+"<b>"+VarTemperatura[i][1]+"</b>"+"</div>");
+		}
+
+		console.log(ArrayTemperatura);
+
+		if((document.getElementById('muestratemp').innerHTML = VarTemperatura[0]) != undefined){
+			document.getElementById('muestratemp').innerHTML = ArrayTemperatura.join("");
+			//document.getElementByClassName('popover-body')[0].style.visibility = 'hidden';
+		} else {
+			document.getElementById('muestratemp').innerHTML = "No hay variables";
+		}
+
+		// HUMEDAD RELATIVA
+		console.log(VarHumedadRelativa.length);
+
+		for(var i=0; i < VarHumedadRelativa.length ; i++){
+			ArrayHumedadRelativa.push("<div>"+"El sensor N° "+"<b>"+VarHumedadRelativa[i][0]+"</b>"+" tiene una Humedad relativa de "+"<b>"+VarHumedadRelativa[i][1]+"</b>"+"</div>");
+		}
+
+		console.log(ArrayHumedadRelativa);
+
+		if((document.getElementById('muestrahumedadre').innerHTML = VarHumedadRelativa[0]) != undefined){
+			document.getElementById('muestrahumedadre').innerHTML = ArrayHumedadRelativa.join("");
+			//document.getElementByClassName('popover-body')[0].style.visibility = 'hidden';
+		} else {
+			document.getElementById('muestrahumedadre').innerHTML = "No hay variables";
+		}
+
+		// HUMEDAD SUELO
+
+		console.log(VarHumedadSuelo.length);
+
+		for(var i=0; i < VarHumedadSuelo.length ; i++){
+			ArrayHumedadSuelo.push("<div>"+"El sensor N° "+"<b>"+VarHumedadSuelo[i][0]+"</b>"+" tiene una Humedad de suelo de "+"<b>"+VarHumedadSuelo[i][1]+"</b>"+"</div>");
+		}
+
+		console.log(ArrayHumedadSuelo);
+
+		if((document.getElementById('muestrahumedadsu').innerHTML = VarHumedadSuelo[0]) != undefined){
+			document.getElementById('muestrahumedadsu').innerHTML = ArrayHumedadSuelo.join("");
+			//document.getElementByClassName('popover-body')[0].style.visibility = 'hidden';
+		} else {
+			document.getElementById('muestrahumedadsu').innerHTML = "No hay variables";
+		}
+
+		// LUMINOSIDAD
+
+		console.log(VarLuminosidad.length);
+
+		for(var i=0; i < VarLuminosidad.length ; i++){
+			ArrayLuminosidad.push("<div>"+"El sensor N° "+"<b>"+VarLuminosidad[i][0]+"</b>"+" tiene una luminosidad de "+"<b>"+VarLuminosidad[i][1]+"</b>"+"</div>");
+		}
+
+		console.log(ArrayLuminosidad);
+
+		if((document.getElementById('muestraluminosidad').innerHTML = VarLuminosidad[0]) != undefined){
+			document.getElementById('muestraluminosidad').innerHTML = ArrayLuminosidad.join("");
+			//document.getElementByClassName('popover-body')[0].style.visibility = 'hidden';
+		} else {
+			document.getElementById('muestraluminosidad').innerHTML = "No hay variables";
+		}
 	});
 }
 
