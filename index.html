@@ -15,7 +15,6 @@
 $(document).ready(function(){
     $('[data-toggle="popover"]').popover({
     	html: "true",
-    	placement: "top",
 	  	content: function() {
 	    	var content = $(this).attr("data-popover-content");
 	    	return $(content).children(".popover-body").html();
@@ -28,61 +27,25 @@ $(document).ready(function(){
 });
 </script>
 
-<script>
-window.onload = function(){
-    var testeo = "testeoxd";
-    var lengthoftesteo = testeo.length
-};
-</script>
 </head>
 <body>
-<!--</body><div id="myModal" class="modal fade" role="dialog">
-	<div class="modal-dialog">
-		CONTENIDO MODAL --
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Ingresar dimensiones prisma.</h4>
-			</div>
-			<div class="modal-body">
-				<div class="form-group">
-					<label>Ancho(m)</label>
-					<input id="nAncho"class="form-control" type="text"></input>
-				</div>
-				<div class="form-group">
-					<label>Alto(m)</label>
-					<input id="nAlto" class="form-control" type="text"></input>
-				</div>
-				<div class="form-group">
-					<label>Largo(m)</label>
-					<input id="nLargo" class="form-control" type="text"></input>
-				</div>
-				<button type="submit" onclick="getXyz()" id="nInfo" class="btn btn-default">Aceptar</button>
-			</div>
-			<div class="modal-footer">
-			<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-			</div>
-		</div>
-	</div>
-</div>-->
 
+<!--POPOVER INFO NODOS-->
 
-
-<div id="dataSensor" class="popover" data-toggle="popover" role="dialog" data-placement="bottom";>
-	<div class="popover-dialog">
-		<!-- CONTENIDO MODAL -->
-		<div class="popover-header">
-			<button type="button" class="close" data-dismiss="modal" >&times;</button>
-			<h4 class>Informacion de Sensor</h4>
-			</div>
-			<div class="popover-body" id="infoSensor">		
-			</div>
-			<div class="popover-footer">
-			<button type="button" id="botonclose" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-			</div>
-		</div>
-	</div>
+<div 	id="popoverinfonodos"
+		data-toggle="popover"
+		data-placement="right"
+		data-popover-content="#mypop2">
 </div>
+
+<div class="hidden" id="mypop2">
+	<div class="popover-heading">
+		<b>Informacion Nodos</b>
+	</div>
+	<div class="popover-body" id="muestrainfonodos"></div>
+</div>
+
+<!--POPOVER INFO NODOS-->
 
 <span style="position:absolute;left:1.5em;top:1.5em;max-width:8em;">
 <div class="btn-group-vertical">
@@ -106,6 +69,7 @@ window.onload = function(){
 			class="btn btn-success"
 			id="botoninfo"
 			data-toggle="popover"
+			data-placement="top"
 			title="INFORMACION"
 			data-content="Aquí verás la <b>información</b>">
 			VER INFO.CUBO
@@ -117,6 +81,7 @@ window.onload = function(){
 	<button type="button" 
 			class="btn btn-danger"
 			id="botonalerta"
+			data-placement="top"
 			data-toggle="popover"
 			data-popover-content="#mypop">
 			VER ALERTAS
@@ -137,6 +102,7 @@ window.onload = function(){
 	<button type="button" 
 			class="btn btn-primary"
 			id="botonvariables"
+			data-placement="top"
 			data-toggle="popover"
 			title="VARIABLES"
 			data-content="Aquí verás las variables">

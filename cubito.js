@@ -11,6 +11,17 @@ var metrosAlto = 4;
 nPos = [(metrosAncho*60),(metrosAlto*60),(metrosLargo*60)] // Posiciones x,y,z
 var horasPlayer = []
 var dataPlayer = [];
+
+$(function () {   
+  $('[data-toggle="popover"]').popover() 
+});
+
+$('body').click(function (e) {
+    if ($(e.target).parent().find('[data-toggle="popover"]').length > 0) {
+        $('#popoverinfonodos').popover('hide');
+    }
+});
+
 $( document ).ready(function() {
 	$.getJSON('https://spreadsheets.google.com/feeds/list/1DH9h8ZMBNLyW-WatGSSRdsBHFh6lQr0oa17ZU_AfZrU/od6/public/values?alt=json', function(data){
 		info = data.feed.entry;//obtiene toda la informacion del json.
@@ -22,20 +33,27 @@ $( document ).ready(function() {
 			dataPlayer.push([this.gsx$macnodo.$t,-(nPos[2]/2)+(adaptZ(this.gsx$pz.$t)),(nPos[1]/2)-(this.gsx$py.$t*60),(-(nPos[0])/2)+(this.gsx$px.$t*60),this.gsx$tp.$t,this.gsx$hr.$t,this.gsx$hs.$t,this.gsx$lu.$t,this.gsx$hora.$t]);
 		});
 	});
-	$('.sensor').click(informe);
+	$('.sensores').click(informe);
 	$("#botonreiniciar").click(reiniciaPos);
 
 
-	function informe(){ //muestra datos de los sensores
+	function informe(e){ //muestra datos de los sensores
 		var id = this.id;
 		var data = id.split(" ");
 		var idSensor = data[0];
 		var Temperatura = data[1];
 		var Humedad = data[2];
 		var Luminosidad = data[3];
-		$("#infoSensor").html("<div class='alert alert-info'><h4>Temperatura: "+Temperatura+" ºC<br>Humedad: "+Humedad+" %<br>Luz: "+Luminosidad+" %</h4></div>");
-		$("#dataSensor").modal("show");
-		//alert("ID Sensor: "+idSensor+"\nTemperatura: "+Temperatura+" ?C\nHumedad: "+Humedad+" %\nLuz: "+Luminosidad+" %");	
+
+	    var PosXmouse = e.pageX,
+	        PosYmouse = e.pageY;
+
+	    console.log(PosXmouse,PosYmouse);
+		var pipovernodos = document.getElementById('popoverinfonodos')
+
+		pipovernodos.style.left = PosXmouse+15+"px"
+		pipovernodos.style.top = PosYmouse+"px"
+		$('#popoverinfonodos').popover('show');	
 	}
 	
 	function initSize(){// DIMENSIONES PRISMA (descartar)
@@ -195,14 +213,12 @@ function dataCSensor(data, tt, id, Data,tp,hr){ //ATRIBUTOS DE SENSORES
 			var id = this.id;
 			var infoAct = (document.getElementById(id).getAttribute("name"));
 			var data = infoAct.split(" ");
-			$('#infoSensor').html(" ");
-			$('#infoSensor').append("<i class='fab fa-slack-hash'></i> "+data[0]+"<hr>");
-			$('#infoSensor').append("<i class='fas fa-thermometer-half'></i> "+data[4]+"<small>ºC </small><hr>");
-			$('#infoSensor').append("<i class='fas fa-water'></i> "+data[5]+"<small>% Humedad Relativa</small><hr>");
-			$('#infoSensor').append("<i class='fas fa-water'></i> "+data[6]+"<small>% Humedad Suelo</small><hr>");
-			$('#infoSensor').append("<i class='far fa-lightbulb'></i> "+data[7] + "% Luz");
-			$('#dataSensor').modal('show');
-			$('.modal-backdrop').removeClass("modal-backdrop");  // REMOVER OSCURECIMIENTO DEL MODAL 	
+			$('#muestrainfonodos').html(" ");
+			$('#muestrainfonodos').append("<i class='fab fa-slack-hash'></i> "+data[0]+"<hr>");
+			$('#muestrainfonodos').append("<i class='fas fa-thermometer-half'></i> "+data[4]+"<small>ºC </small><hr>");
+			$('#muestrainfonodos').append("<i class='fas fa-water'></i> "+data[5]+"<small>% Humedad Relativa</small><hr>");
+			$('#muestrainfonodos').append("<i class='fas fa-water'></i> "+data[6]+"<small>% Humedad Suelo</small><hr>");
+			$('#muestrainfonodos').append("<i class='far fa-lightbulb'></i> "+data[7] + "% Luz");	
 		})
 		.merge(cubos);
 
