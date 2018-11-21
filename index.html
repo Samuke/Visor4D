@@ -84,10 +84,15 @@ window.onload = function(){
 	</div>
 </div>
 
-<span style="position:absolute;top:1.5em;max-width:5em;">
-	<button type="button" id="botonreiniciar" class="btn btn-secondary">Reiniciar Posición</button>
-	<!--<button id="MuestraDatosJSON" class="btn btn-primary"style="margin-top:0.5em;">Mostrar datos JSON</button>-->
+<span style="position:absolute;left:1.5em;top:1.5em;max-width:8em;">
+<div class="btn-group-vertical">
+	<button type="button" class="btn btn-default" id="botonreiniciar" style="margin-bottom:1em;">Reiniciar<br>Posición</button>
+	<button type="button" class="btn btn-primary" id="muestraTempe">Temperatura</button>
+	<button type="button" class="btn btn-info" id="muestraHume">Humedad</button>
+	<button type="button" class="btn btn-warning" id="muestraLumi">Luminosidad</button>
+</div>
 </span>
+
 <svg class="vCubo" id="chart" width="800" height="600" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">
 	<img src="temp.png" class="img-responsive" align="" id="tempe" style="width:20px;height:40%;">  
 </svg>
