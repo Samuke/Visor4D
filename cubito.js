@@ -12,9 +12,22 @@ nPos = [(metrosAncho*60),(metrosAlto*60),(metrosLargo*60)] // Posiciones x,y,z
 var horasPlayer = []
 var dataPlayer = [];
 
-$(function () {   
+var info, aDataid = [], aDataSensor = [], AlertasTemps = [], ArrayAlertas = [];
+var VarTemperatura = [], VarHumedadRelativa = [], VarHumedadSuelo = [], VarLuminosidad = [];
+var ArrayTemperatura = [], ArrayHumedadRelativa = [], ArrayHumedadSuelo = [], ArrayLuminosidad = [];
+
+var cubes3D = d3._3d()
+	.shape('CUBE')
+	.x(function(d){ return d.x; })
+	.y(function(d){ return d.y; })
+	.z(function(d){ return d.z; })
+	.rotateY( startAngle)
+	.rotateX(-startAngle)
+	.origin(origin);
+
+/*$(function () {   
   $('[data-toggle="popover"]').popover() 
-});
+});*/
 
 $('body').click(function (e) {
     if ($(e.target).parent().find('[data-toggle="popover"]').length > 0) {
@@ -22,7 +35,7 @@ $('body').click(function (e) {
     }
 });
 
-$( document ).ready(function() {
+$(document).ready(function(){
 	/*$.getJSON('https://spreadsheets.google.com/feeds/list/1DH9h8ZMBNLyW-WatGSSRdsBHFh6lQr0oa17ZU_AfZrU/od6/public/values?alt=json', function(data){
 		info = data.feed.entry;//obtiene toda la informacion del json.
 		$(info).each(function(){//recorre cada fila de datos.
@@ -64,21 +77,7 @@ $( document ).ready(function() {
 		nPos=[x*30,y*30,z*30];
 		initFaces(1,nPos[0],nPos[1],nPos[2]);
 	}
-});         
-
-function TESTING(){
-	$("#9999997").attr("stroke",d3.rgb(0,0,0));
-}
-
-var cubes3D = d3._3d()
-	.shape('CUBE')
-	.x(function(d){ return d.x; })
-	.y(function(d){ return d.y; })
-	.z(function(d){ return d.z; })
-	.rotateY( startAngle)
-	.rotateX(-startAngle)
-	.origin(origin);
-
+});
 
 function dataFaces(data, tt){ //atributos de las caras del cubo
 	var cubos = carasPrisma.selectAll('g.caras').data(data, function(d){ return d.id });
@@ -104,7 +103,6 @@ function dataFaces(data, tt){ //atributos de las caras del cubo
 		.transition().duration(tt)
 		.attr('d', cubes3D.draw);
 }
-
 
 function initFaces(id, posX, posY, posZ){  // Creacion caras del prisma.
 	sensorData = [];                        
@@ -270,28 +268,20 @@ function makeSensor(x, y, z, radio){ //CREACION DE LAS CARAS DEL PRISMA
 
 
 function initallsensor(tiempoData){ // POSICIONA TODOS LOS SENSORES EN EL VISOR (CUBO)
-	var Digital=new Date();
-	var hora_actual=Digital.getHours();
-	var aDataid = [];
-	var aDataSensor = [];
-	var AlertasTemps = [];
-	var ArrayAlertas = [];
-	var VarTemperatura   = []; var VarHumedadRelativa   = [];    var VarHumedadSuelo      = []; var VarLuminosidad   = [];
-	var ArrayTemperatura = []; var ArrayHumedadRelativa = [];    var ArrayHumedadSuelo    = []; var ArrayLuminosidad = []; 
-	// PRIMERO RESCATAREMOS LAS IDS QUE LLEGAN DE LOS NODOS EN EL JSON
 	$.getJSON('https://spreadsheets.google.com/feeds/list/1DH9h8ZMBNLyW-WatGSSRdsBHFh6lQr0oa17ZU_AfZrU/od6/public/values?alt=json', function(data){
+		// PRIMERO RESCATAREMOS LAS IDS QUE LLEGAN DE LOS NODOS EN EL JSON
 		info = data.feed.entry;//obtiene toda la informacion del json.
 		/*$(info).each(function(){
 			tiempoData.push(this.gsx$hora.$t);
 		});*/
-			
+		console.log(info);
 		$(info).each(function(){
 			//recorre cada fila de datos.
 			if(aDataid.indexOf(this.gsx$macnodo.$t)==-1){
 				aDataid.push(this.gsx$macnodo.$t);
 			}	
 		});
-		dibujaSensor(info, tiempoData, aDataid, aDataSensor, VarTemperatura, VarHumedadRelativa, VarHumedadSuelo, VarLuminosidad, AlertasTemps);
+		dibujaSensor(info, tiempoData);
 		
 
 		//console.log(AlertasTemps.length);
@@ -382,7 +372,7 @@ function initallsensor(tiempoData){ // POSICIONA TODOS LOS SENSORES EN EL VISOR 
 	});
 }
 
-function dibujaSensor(info, tiempoData, aDataid, aDataSensor, VarTemperatura, VarHumedadRelativa, VarHumedadSuelo, VarLuminosidad, AlertasTemps){
+function dibujaSensor(info, tiempoData){
 	console.log(tiempoData);
 	//PARA CADA ID DEL ARRAY, SE GUARDARAN EN OTRO ARRAY LOS DATOS EN LA HORA ACTUAL. (NO DIA).
 	$(info).each(function(){
@@ -439,8 +429,8 @@ initFaces(1,nPos[0],nPos[1],nPos[2]);
 
 function cambiaHora(){
 	console.log("CLICK!");
-	tiempoData = "19:00";
-	aDataSensor = [];
+	tiempoData = "19:00", info = [];
+	aDataSensor = [], aDataid = [], aDataSensor = [], VarTemperatura = [], VarHumedadRelativa = [], VarHumedadSuelo = [], VarLuminosidad = [], AlertasTemps = [];
 	console.log(aDataSensor);
 	initallsensor(tiempoData);
 }
