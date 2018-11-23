@@ -18,3 +18,10 @@ label{margin-bottom:1em;}
 .popover{max-width: 15%;}  /* Maximo anchura popovers */
 #muestrasensoralerta,#muestrainfonodos{text-decoration:none; color:black}
 #popoverinfonodos{position: absolute}
+.btn-variables{display:grid;grid-column-gap:1em;grid-row-gap:1em;}
+/*.btn-redondo img{height:120px;width:120px;}*/
+.btn-tempe{background-color:#ff8e41;border-color:#ff6700;color:#fff;}
+.btn-humerel{background-color:#51bafe;border-color:#549fff;color:#2f2f2f;}
+.btn-humesuel{background-color:#f8ca8d;border-color:#ffaf54;color:#2f2f2f;}
+.btn-lumi{background-color:#ffdc61;border-color:#ffba2e;color:#2f2f2f;}
+.btn-redondo{background-color:#efefef;border:1px solid #c3c3c3;border-radius:100% !important;padding:1em !important;}

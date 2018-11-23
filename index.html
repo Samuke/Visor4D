@@ -7,10 +7,9 @@
 <script src="./librerias/d3.v4.min.js"></script>
 <script src="./librerias/d3-3d.min.js"></script>
 <script src="./librerias/bootstrap.min.js"></script>
-<link rel="stylesheet" href="./librerias/bootstrap.min.css"/><!-- integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
-<link rel="stylesheet" href="./librerias/all.css"/><!-- integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">-->
+<link rel="stylesheet" href="./librerias/bootstrap.min.css"/>
+<link rel="stylesheet" href="./librerias/all.css"/>
 <link rel="stylesheet" href="style.css"/>
-<!--<link rel="stylesheet" href="" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">-->
 <script>
 $(document).ready(function(){
     $('[data-toggle="popover"]').popover({
@@ -27,180 +26,98 @@ $(document).ready(function(){
     });
 });
 </script>
-
 </head>
 <body>
+	<!-- POPOVER INFO NODOS-->
+	<div id="popoverinfonodos" data-toggle="popover" data-placement="right" data-popover-content="#mypop2"></div>
 
-<!-- POPOVER INFO NODOS-->
-
-<div 	id="popoverinfonodos"
-		data-toggle="popover"
-		data-placement="right"
-		data-popover-content="#mypop2">
-</div>
-
-<div class="hidden" id="mypop2">
-	<div class="popover-heading">
-		<b>Informacion Nodos</b>
+	<div class="hidden" id="mypop2">
+		<div class="popover-heading">
+			<b>Informacion Nodos</b>
+		</div>
+		<div class="popover-body" id="muestrainfonodos"></div>
 	</div>
-	<div class="popover-body" id="muestrainfonodos"></div>
-</div>
 
-<!-- POPOVERS VARIABLES DE NODOS -->
+	<!-- POPOVERS VARIABLES DE NODOS -->
 
-<div class="hidden" id="poptemp">
-		<div class="popover-heading"
-			 data-placement="right">
-			<b>TEMPERATURA</b>
-		</div>
-		<div class="popover-body"
-		     id="muestratemp">
-	    </div>
-</div>
-
-<div class="hidden" id="pophumedadre">
-		<div class="popover-heading"
-			 data-placement="right">
-			<b>HUMEDAD RELATIVA</b>
-		</div>
-		<div class="popover-body"
-		     id="muestrahumedadre">
-	    </div>
-</div>
-
-<div class="hidden" id="pophumedadsu">
-		<div class="popover-heading"
-			 data-placement="right">
-			<b>HUMEDAD SUELO</b>
-		</div>
-		<div class="popover-body"
-		     id="muestrahumedadsu">
-	    </div>
-</div>
-
-<div class="hidden" id="poplumi">
-		<div class="popover-heading"
-			 data-placement="right">
-			<b>LUMINOSIDAD</b>
-		</div>
-		<div class="popover-body"
-		     id="muestraluminosidad">
-	    </div>
-</div>
-
-<div class="hidden" id="mypop">
-		<div class="popover-heading"
-			 data-placement="right">
-			<b>ALERTAS</b>
-		</div>
-		<div class="popover-body">
-		    <a id="muestrasensoralerta"></a>
-	    </div>
-</div>
-
-<span style="position:absolute;left:0.5em;top:1.5em;max-width:15em;">
-<div class="btn-group-vertical">
-	<button type="button" class="btn btn-default" id="botonreiniciar" style="margin-bottom:1em;width: 12em;"><b>Reiniciar<br>Posición</b></button>
-	
-	<!--BOTONES CON POPOVER (TEMPERATURA)-->
-	<button type="button" 
-			style="background-color:#cc0000;"
-			class="btn btn-primary"
-			id="botontemperatura"
-			data-toggle="popover"
-			data-placement="right"
-			data-popover-content="#poptemp">
-			TEMPERATURA
-	</button>
-
-	<!--BOTONES CON POPOVER (HUMEDAD RELATIVA)-->
-
-	<button type="button" 
-			style="background-color: #009900;"
-			class="btn btn-primary"
-			id="botonhumedadre"
-			data-toggle="popover"
-			data-placement="right"
-			data-popover-content="#pophumedadre">
-			HUMEDAD RELATIVA
-	</button>
-
-	<!--BOTONES CON POPOVER (HUMEDAD DE SUELO)-->
-	<button type="button" 
-			class="btn btn-primary"
-			style="background-color:#994c00"
-			id="botonhumedadsu"
-			data-toggle="popover"
-			data-placement="right"
-			data-popover-content="#pophumedadsu">
-			HUMEDAD SUELO
-	</button>
-
-	<!--BOTONES CON POPOVER (LUMINOSIDAD)-->
-	<button type="button" 
-			class="btn btn-primary"
-			style="background-color:#9933ff;"
-			id="botonluminosidad"
-			data-toggle="popover"
-			data-placement="right"
-			data-popover-content="#poplumi">
-			LUMINOSIDAD
-	</button>
-</div>
-</span>
-
-<svg class="vCubo" id="chart" width="800" height="600" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">
-	<img src="temp.png" class="img-responsive" align="" id="tempe" style="width:20px;height:40%;">  
-</svg>
-<!-- barra de temperatura -->
-<script src="cubito.js"></script>
-<div class="text-center btnsCentrales">
-
-	<!--BOTONES CON POPOVER (INFO CUBO)-->
-
-	<button type="button"
-			class="btn btn-success"
-			id="botoninfo"
-			data-toggle="popover"
-			data-placement="top"
-			title="INFORMACION"
-			data-content="Aquí verás la <b>información</b>">
-			VER INFO.CUBO
-	</button>
-
-	<!--BOTONES CON POPOVER (ALERTAS)-->
-
-	<button type="button" 
-			class="btn btn-danger"
-			id="botonalerta"
-			data-placement="top"
-			data-toggle="popover"
-			data-popover-content="#mypop">
-			VER ALERTAS
-	</button>
-
-
-	<!--BOTONES CON POPOVER VARIABLES (DESCARTADO)
-	<button type="button" 
-			class="btn btn-primary"
-			id="botonvariables"
-			data-placement="top"
-			data-toggle="popover"
-			title="VARIABLES"
-			data-content="Aquí verás las variables">
-			VER VARIABLES
-	</button>-->
-	<button class="btn btn-default disabled" id="miTiempo">_</button>
-	<button class="btn btn-info" id="alertita">Tiempo 2</button>	
-</div>
-<div class="linea">
-	<div class="col-md-1"></div>
-	<div class="col-md-10 lt">
-		<h2><i id="playButton" onclick="reproduceData(0)" class="fas fa-play"></i></h2>
+	<div class="hidden" id="poptemp">
+		<div class="popover-heading" data-placement="right"><b>TEMPERATURA</b></div>
+		<div class="popover-body" id="muestratemp"></div>
 	</div>
-	<div class="col-md-1"></div>
-</div>
-<div id="datos" style="line-height:1em;"></div>
 
+	<div class="hidden" id="pophumedadre">
+		<div class="popover-heading" data-placement="right"><b>HUMEDAD RELATIVA</b></div>
+		<div class="popover-body" id="muestrahumedadre"></div>
+	</div>
+
+	<div class="hidden" id="pophumedadsu">
+		<div class="popover-heading" data-placement="right"><b>HUMEDAD SUELO</b></div>
+		<div class="popover-body" id="muestrahumedadsu"></div>
+	</div>
+
+	<div class="hidden" id="poplumi">
+		<div class="popover-heading" data-placement="right"><b>LUMINOSIDAD</b></div>
+		<div class="popover-body" id="muestraluminosidad"></div>
+	</div>
+
+	<div class="hidden" id="mypop">
+		<div class="popover-heading" data-placement="right"><b>ALERTAS</b></div>
+		<div class="popover-body"><a id="muestrasensoralerta"></a></div>
+	</div>
+
+	<span style="position:absolute;left:1.5em;top:1.5em;"><!--max-width:15em;-->
+		<button class="btn-redondo" id="botonreiniciar" style="margin-bottom:1em;" title="Reiniciar posición"><img src="reiniciar.svg" alt="Reiniciar posición" height="32" width="32"/></button>
+			<!--BOTONES CON POPOVER (TEMPERATURA)-->
+		<div class="btn-variables">
+			<button class="btn-redondo" id="botontemperatura" data-toggle="popover" data-placement="right" data-popover-content="#poptemp"><img src="temperatura.svg" alt="Temperatura" height="32" width="32"/></button>
+
+			<!--BOTONES CON POPOVER (HUMEDAD RELATIVA)-->
+			<button class="btn-redondo" id="botonhumedadre" data-toggle="popover" data-placement="right" data-popover-content="#pophumedadre"><img src="humedad_rel.svg" alt="Humedad Relativa" height="32" width="32"/></button>
+
+			<!--BOTONES CON POPOVER (HUMEDAD DE SUELO)-->
+			<button class="btn-redondo" id="botonhumedadsu" data-toggle="popover" data-placement="right" data-popover-content="#pophumedadsu"><img src="humedad_suel.svg" alt="Humedad Suelo" height="32" width="32"/></button>
+
+			<!--BOTONES CON POPOVER (LUMINOSIDAD)-->
+			<button class="btn-redondo" id="botonluminosidad" data-toggle="popover" data-placement="right" data-popover-content="#poplumi"><img src="luminosidad.svg" alt="Luminosidad" height="32" width="32"/></button><!-- style="background:red;"-->
+		</div>
+	</span>
+
+	<svg class="vCubo" id="chart" width="800" height="600" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">
+		<img src="temp.png" class="img-responsive" align="" id="tempe" style="width:20px;height:40%;">  
+	</svg>
+	<script src="cubito.js"></script>
+
+	<div class="text-center btnsCentrales">
+		<!--BOTONES CON POPOVER (INFO CUBO)-->
+		<button type="button"
+				class="btn btn-success"
+				id="botoninfo"
+				data-toggle="popover"
+				data-placement="top"
+				title="INFORMACION"
+				data-content="Aquí verás la <b>información</b>">
+				VER INFO.CUBO
+		</button>
+
+		<!--BOTONES CON POPOVER (ALERTAS)-->
+		<button type="button" 
+				class="btn btn-danger"
+				id="botonalerta"
+				data-placement="top"
+				data-toggle="popover"
+				data-popover-content="#mypop">
+				VER ALERTAS
+		</button>
+		<button class="btn btn-default disabled" id="miTiempo">_</button>
+		<button class="btn btn-info" id="alertita">Tiempo 2</button>	
+	</div>
+	<div class="linea">
+		<div class="col-md-1"></div>
+		<div class="col-md-10 lt">
+			<h2><i id="playButton" onclick="reproduceData(0)" class="fas fa-play"></i></h2>
+		</div>
+		<div class="col-md-1"></div>
+	</div>
+	<div id="datos" style="line-height:1em;"></div>
 </body>
 </html>
