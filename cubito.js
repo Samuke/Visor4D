@@ -20,7 +20,9 @@ var aDataid = [], aDataSensor = [], AlertasTemps = [], ArrayAlertas = [];
 var VarTemperatura = [], VarHumedadRelativa = [], VarHumedadSuelo = [], VarLuminosidad = [], ArrayTemperatura = [], ArrayHumedadRelativa = [], ArrayHumedadSuelo = [], ArrayLuminosidad = []; 
 
 var eFecha = "3/10/2018";//fecha que eligio el usuario.
-var tiempoData = "0:00";;
+var Datex = new Date();
+var HoraActual = Datex.getHours();
+var tiempoData = HoraActual+":00";
 
 var cubes3D = d3._3d()
 	.shape('CUBE')
