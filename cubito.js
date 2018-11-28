@@ -44,6 +44,8 @@ $('body').click(function (e) {
 });
 // === PRINCIPAL ================================================================
 $(document).ready(function(){
+	$("#miTiempo").html(tiempoData);
+
 	$.getJSON('https://spreadsheets.google.com/feeds/list/1DH9h8ZMBNLyW-WatGSSRdsBHFh6lQr0oa17ZU_AfZrU/od6/public/values?alt=json', function(data){
 		info = data.feed.entry;//obtiene toda la informacion del json.
 		$(info).each(function(){//recorre cada fila de datos.
