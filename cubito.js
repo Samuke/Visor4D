@@ -33,9 +33,15 @@ $( document ).ready(function() {
 			dataPlayer.push([this.gsx$macnodo.$t,-(nPos[2]/2)+(adaptZ(this.gsx$pz.$t)),(nPos[1]/2)-(this.gsx$py.$t*60),(-(nPos[0])/2)+(this.gsx$px.$t*60),this.gsx$tp.$t,this.gsx$hr.$t,this.gsx$hs.$t,this.gsx$lu.$t,this.gsx$hora.$t]);
 		});
 	});
+	muestrainfocubo();
 	$('.sensores').click(informe);
 	$("#botonreiniciar").click(reiniciaPos);
 
+	function muestrainfocubo(){
+		var ArrayInfoCubo = [];
+		ArrayInfoCubo.push("<div>"+"Ancho: "+"<b>"+metrosAncho+"</b>"+" metros"+"</div>","<div>"+"Largo: &nbsp;"+"<b>"+metrosLargo+"</b>"+" metros"+"</div>","<div>"+"Alto: &nbsp;&nbsp;&nbsp;&nbsp;"+"<b>"+metrosAlto+"</b>"+" metros"+"</div>");
+		document.getElementById('muestrainfocubo').innerHTML = ArrayInfoCubo.join("");
+	}
 
 	function informe(e){ //muestra datos de los sensores
 		var id = this.id;
