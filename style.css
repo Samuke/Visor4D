@@ -14,7 +14,7 @@ label{margin-bottom:1em;}
 .linea{align-items:center;display:flex;height:15%;}
 .linea h2{font-size:1.5em;}
 .btnsCentrales{position:absolute;width:100%;bottom:15%;}
-.popover{max-width: 15%;}  /* Maximo anchura popovers */
+.popover{max-width: 100%;}  /* Maximo anchura popovers */
 #muestrasensoralerta,#muestrainfonodosm,#muestrainfocubo{text-decoration:none; color:black}
 #popoverinfonodos{position: absolute}
 .btn-variables{display:grid;grid-column-gap:1em;grid-row-gap:1em;}

@@ -42,6 +42,17 @@ $('body').click(function (e) {
 });
 // === PRINCIPAL ================================================================
 $(document).ready(function(){
+	$.getJSON('https://spreadsheets.google.com/feeds/list/1DH9h8ZMBNLyW-WatGSSRdsBHFh6lQr0oa17ZU_AfZrU/od6/public/values?alt=json', function(data){
+		info = data.feed.entry;//obtiene toda la informacion del json.
+		$(info).each(function(){//recorre cada fila de datos.
+			var hora = this.gsx$hora.$t;
+			if(horasPlayer.length<24){
+				horasPlayer.push(hora);
+			}
+			console.log(horasPlayer[23])
+			dataPlayer.push([this.gsx$macnodo.$t,-(nPos[2]/2)+(adaptZ(this.gsx$pz.$t)),(nPos[1]/2)-(this.gsx$py.$t*60),(-(nPos[0])/2)+(this.gsx$px.$t*60),this.gsx$tp.$t,this.gsx$hr.$t,this.gsx$hs.$t,this.gsx$lu.$t,this.gsx$hora.$t]);
+		});
+	});
 	initallsensor(tiempoData);
 	initFaces(1,nPos[0],nPos[1],nPos[2]);
 	// Si quieren probar otras dimensiones cambiar valores del init, 
@@ -224,8 +235,8 @@ function dataCSensor(data, tt, id, Data,tp,hr){ //ATRIBUTOS DE SENSORES
 			$('#muestrainfonodos').html(" ");
 			$('#muestrainfonodos').append("<i class='fab fa-slack-hash'></i> "+data[0]+"<hr>");
 			$('#muestrainfonodos').append("<i class='fas fa-thermometer-half'></i> "+data[4]+"<small>ºC </small><hr>");
-			$('#muestrainfonodos').append("<i class='fas fa-water'></i> "+data[5]+"<small>% Humedad Relativa</small><hr>");
-			$('#muestrainfonodos').append("<i class='fas fa-water'></i> "+data[6]+"<small>% Humedad Suelo</small><hr>");
+			$('#muestrainfonodos').append("<i class='fas fa-tint'></i> "+data[5]+"<small>% Humedad Relativa</small><hr>");
+			$('#muestrainfonodos').append("<i class='fas fa-tint'></i> "+data[6]+"<small>% Humedad Suelo</small><hr>");
 			$('#muestrainfonodos').append("<i class='far fa-lightbulb'></i> "+data[7] + "% Luz");	
 		})
 		.merge(cubos);
@@ -291,36 +302,36 @@ function initallsensor(tiempoData){ // POSICIONA TODOS LOS SENSORES EN EL VISOR 
 }
 
 function dibujaSensor(info, tiempoData){
-	//PARA CADA ID DEL ARRAY, SE GUARDARAN EN OTRO ARRAY LOS DATOS EN LA HORA ACTUAL. (NO DIA).
 	for(var i=0; i < aDataid.length ; i++){
-		$(info).each(function(){
-			var ax = (this.gsx$hora.$t).split(":");
-			if(this.gsx$macnodo.$t == aDataid[i] && this.gsx$hora.$t == tiempoData && this.gsx$fecha.$t == eFecha){
-				aDataSensor = [aDataid[i],-(nPos[2]/2)+(adaptZ(this.gsx$pz.$t)),(nPos[1]/2)-(this.gsx$py.$t*60),(-(nPos[0])/2)+(this.gsx$px.$t*60),this.gsx$tp.$t,this.gsx$hr.$t,this.gsx$hs.$t,this.gsx$lu.$t]
-				// MODIFICAR LOS RANDOM X Y Z, CONVERTIR LA CANTIDAD RESCATADA EN METROS
-				// this.gsx$px.$t this.gsx$y.$t  this.gsx$pz.$t 
-				// --------------------------------------------------------------------
-				initSensor(aDataSensor[0],aDataSensor[1],aDataSensor[2],aDataSensor[3],aDataSensor[4],aDataSensor[5],aDataSensor[6],aDataSensor[7],5);
-				console.log("Nodo "+i+":",aDataSensor[4]+" Grados")
+			$(info).each(function(){
+				var ax = (this.gsx$hora.$t).split(":");
+				if(this.gsx$macnodo.$t == aDataid[i] && this.gsx$hora.$t == tiempoData && this.gsx$fecha.$t == eFecha){
+					aDataSensor = [aDataid[i],-(nPos[2]/2)+(adaptZ(this.gsx$pz.$t)),(nPos[1]/2)-(this.gsx$py.$t*60),(-(nPos[0])/2)+(this.gsx$px.$t*60),this.gsx$tp.$t,this.gsx$hr.$t,this.gsx$hs.$t,this.gsx$lu.$t]
+					
+					// MODIFICAR LOS RANDOM X Y Z, CONVERTIR LA CANTIDAD RESCATADA EN METROS
+					// this.gsx$px.$t this.gsx$y.$t  this.gsx$pz.$t 
+					// --------------------------------------------------------------------
+					initSensor(aDataSensor[0],aDataSensor[1],aDataSensor[2],aDataSensor[3],aDataSensor[4],aDataSensor[5],aDataSensor[6],aDataSensor[7],5);
+					console.log("Nodo "+i+":",aDataSensor[4]+" Grados")
 
-				VarTemperatura.push		([aDataSensor[0],aDataSensor[4]]);
-				VarHumedadRelativa.push ([aDataSensor[0],aDataSensor[5]]);
-				VarHumedadSuelo.push	([aDataSensor[0],aDataSensor[6]]);
-				VarLuminosidad.push		([aDataSensor[0],aDataSensor[7]]);
+					VarTemperatura.push		([aDataSensor[0],aDataSensor[4]]);
+					VarHumedadRelativa.push ([aDataSensor[0],aDataSensor[5]]);
+					VarHumedadSuelo.push	([aDataSensor[0],aDataSensor[6]]);
+					VarLuminosidad.push		([aDataSensor[0],aDataSensor[7]]);
 
-				if((aDataSensor[4])>"1"){
-					console.log("Demasiada Temperatura");
-					AlertasTemps.push([aDataSensor[0],aDataSensor[4]]);
+					if((aDataSensor[4])>"1"){
+						console.log("Demasiada Temperatura");
+						AlertasTemps.push([aDataSensor[0],aDataSensor[4]]);
+					}
 				}
-				$("#miTiempo").html(this.gsx$hora.$t);//muestra la hora a la que se cambio
-			}
-		});
+			});
 	}
 }
 
+
 function infoPopups(){
 	for(var i=0;i<AlertasTemps.length;i++){ ArrayAlertas.push("<div>El sensor <b>"+ AlertasTemps[i][0] +"</b> alcanzó <b>"+ AlertasTemps[i][1] +"</b> grados</div>");}
-	for(var i=0;i<VarTemperatura.length;i++){ ArrayTemperatura.push("<div>El sensor N° <b>"+ VarTemperatura[i][0] +"</b> tiene una Temperatura de <b>"+ VarTemperatura[i][1] +"</b></div>");}
+	for(var i=0;i<VarTemperatura.length;i++){ ArrayTemperatura.push("<div id='test2'>El sensor N° <b>"+ VarTemperatura[i][0] +"</b> tiene una Temperatura de <b>"+ VarTemperatura[i][1] +"</b></div>");}
 	for(var i=0;i<VarHumedadRelativa.length;i++){ ArrayHumedadRelativa.push("<div>El sensor N° <b>"+ VarHumedadRelativa[i][0] +"</b> tiene una Humedad relativa de <b>"+ VarHumedadRelativa[i][1] +"</b></div>");}
 	for(var i=0;i<VarHumedadSuelo.length;i++){ ArrayHumedadSuelo.push("<div>El sensor N° <b>"+ VarHumedadSuelo[i][0] +"</b> tiene una Humedad de suelo de <b>"+ VarHumedadSuelo[i][1] +"</b></div>");}
 	for(var i=0;i<VarLuminosidad.length;i++){ ArrayLuminosidad.push("<div>El sensor N° <b>"+ VarLuminosidad[i][0] +"</b> tiene una luminosidad de <b>"+ VarLuminosidad[i][1] +"</b></div>");}
@@ -367,13 +378,36 @@ function adaptZ(posZ){
 }
 
 function cambiaHora(){
+	VarTemperatura  = [];
+	VarHumedadRelativa = [];
+	VarHumedadSuelo = [];
+	VarLuminosidad = [];
+	AlertasTemps = [];
 	console.log("CLICK!");
 	tiempoData = "19:00";//, info = [];
+	for (var j = 0 ; j < dataPlayer.length; j++) { // Recorremos todos los datos
+		if(dataPlayer[j][8] == tiempoData){    // Y vemos en donde la hora de este NODO sea igual a la hora actual recorrida.
+			var tp = adaptZ(dataPlayer[j][4])/60;	// obtenemos la temperatura del arreglo donde tenemos toda la info.
+			var color = asgColor(tp);				
+			$("#"+dataPlayer[j][0]).attr("fill",color); 	//Graficamos el nodo segun temperatura de la hora 
+			$("#"+dataPlayer[j][0]).attr("stroke",color);
+			VarTemperatura.push		([dataPlayer[j][0],dataPlayer[j][4]]);
+			VarHumedadRelativa.push ([dataPlayer[j][0],dataPlayer[j][5]]);
+			VarHumedadSuelo.push	([dataPlayer[j][0],dataPlayer[j][6]]);
+			VarLuminosidad.push		([dataPlayer[j][0],dataPlayer[j][7]]);
+			if((aDataSensor[4])>"1"){
+				console.log("Demasiada Temperatura");
+				AlertasTemps.push([aDataSensor[0],aDataSensor[4]]);
+			}	
+		}
+	}
+	console.log(VarTemperatura);
+	infoPopups()
+	$("#miTiempo").html(tiempoData);//muestra la hora a la que se cambio
 	// aDataid = [], aDataSensor = [], AlertasTemps = [], ArrayAlertas = [];
 	// VarTemperatura = [], VarHumedadRelativa = [], VarHumedadSuelo = [], VarLuminosidad = [];
 	// ArrayTemperatura = [], ArrayHumedadRelativa = [], ArrayHumedadSuelo = [], ArrayLuminosidad = [];
-	$(".sensores").empty();
 	// console.log(aDataSensor);
-	initallsensor(tiempoData);
+	//updateSensor(tiempoData);
 	console.log("\tSale cambiaHora()");
 }
