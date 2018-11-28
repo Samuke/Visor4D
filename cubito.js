@@ -20,9 +20,7 @@ var aDataid = [], aDataSensor = [], AlertasTemps = [], ArrayAlertas = [];
 var VarTemperatura = [], VarHumedadRelativa = [], VarHumedadSuelo = [], VarLuminosidad = [], ArrayTemperatura = [], ArrayHumedadRelativa = [], ArrayHumedadSuelo = [], ArrayLuminosidad = []; 
 
 var eFecha = "3/10/2018";//fecha que eligio el usuario.
-var Datex = new Date();
-var HoraActual = Datex.getHours();
-var tiempoData = HoraActual+":00";
+var tiempoData = "0:00";;
 
 var cubes3D = d3._3d()
 	.shape('CUBE')
@@ -395,6 +393,18 @@ function cambiaHora(){
 			VarHumedadRelativa.push ([dataPlayer[j][0],dataPlayer[j][5]]);
 			VarHumedadSuelo.push	([dataPlayer[j][0],dataPlayer[j][6]]);
 			VarLuminosidad.push		([dataPlayer[j][0],dataPlayer[j][7]]);
+			var xData = dataPlayer[j][0]+" "+dataPlayer[j][1]+" "+dataPlayer[j][2]+" "+dataPlayer[j][3]+" "+dataPlayer[j][4]+" "+dataPlayer[j][5]+" "+dataPlayer[j][6]+" "+dataPlayer[j][7];
+			$("#"+dataPlayer[j][0]).attr("name",xData)
+			var infoAct = (document.getElementById(dataPlayer[j][0]).getAttribute("name"));
+			var data2 = infoAct.split(" ");
+			$("#"+data2[0]).on('click',function(){
+				$('#muestrainfonodos').html(" ");
+				$('#muestrainfonodos').append("<i class='fab fa-slack-hash'></i> "+data2[0]+"<hr>");
+				$('#muestrainfonodos').append("<i class='fas fa-thermometer-half'></i> "+data2[4]+"<small>ºC </small><hr>");
+				$('#muestrainfonodos').append("<i class='fas fa-tint'></i> "+data2[5]+"<small>% Humedad Relativa</small><hr>");
+				$('#muestrainfonodos').append("<i class='fas fa-tint'></i> "+data2[6]+"<small>% Humedad Suelo</small><hr>");
+				$('#muestrainfonodos').append("<i class='far fa-lightbulb'></i> "+data2[7] + "% Luz");	
+			});
 			if((aDataSensor[4])>"1"){
 				console.log("Demasiada Temperatura");
 				AlertasTemps.push([aDataSensor[0],aDataSensor[4]]);
