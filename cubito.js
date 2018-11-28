@@ -378,11 +378,9 @@ function adaptZ(posZ){
 }
 
 function cambiaHora(){
-	VarTemperatura  = [];
-	VarHumedadRelativa = [];
-	VarHumedadSuelo = [];
-	VarLuminosidad = [];
-	AlertasTemps = [];
+	$("#muestratemp").html("");
+	VarTemperatura  = [];VarHumedadRelativa = [];VarHumedadSuelo = [];VarLuminosidad = [];AlertasTemps = [];
+	ArrayTemperatura = [];ArrayLuminosidad = [];ArrayAlertas = [];ArrayHumedadSuelo = [];ArrayHumedadRelativa = [];
 	console.log("CLICK!");
 	tiempoData = "19:00";//, info = [];
 	for (var j = 0 ; j < dataPlayer.length; j++) { // Recorremos todos los datos
