@@ -39,6 +39,13 @@ $(document).ready(function(){
 		data-popover-content="#mypop2">
 </div>
 
+<div class="hidden" id="mypop2">
+	<div class="popover-heading">
+		<b>Informacion Nodos</b>
+	</div>
+	<div class="popover-body" id="muestrainfonodos"></div>
+</div>
+
 <!-- POPOVERS VARIABLES DE NODOS -->
 
 <div class="hidden" id="poptemp">
@@ -91,10 +98,10 @@ $(document).ready(function(){
 	    </div>
 </div>
 
-<div class="hidden" id="mypop2">
+<div class="hidden" id="mypop3">
 		<div class="popover-heading"
 			 data-placement="right">
-			<b>INFO CUBO</b>
+			<b>VER INFO.CUBO</b>
 		</div>
 		<div class="popover-body">
 		    <a id="muestrainfocubo"></a>
@@ -166,9 +173,19 @@ $(document).ready(function(){
 			id="botoninfo"
 			data-placement="top"
 			data-toggle="popover"
-			data-popover-content="#mypop2">
+			data-popover-content="#mypop3">
 			VER INFO.CUBO
 	</button>
+
+	<div class="hidden" id="mypop3">
+			<div class="popover-heading"
+				 data-placement="right">
+				<b>Información Cubo</b>
+			</div>
+			<div class="popover-body">
+			    <a id="muestrainfocubo"></a>
+		    </div>
+	</div>
 
 	<!--BOTONES CON POPOVER (ALERTAS)-->
 
