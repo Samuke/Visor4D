@@ -1,6 +1,10 @@
 var origin = [400, 300], scale = 10, cubesData = [], sensorData = [], leSensor = [], alpha = 0, beta = 0, startAngle = Math.PI/6;
-var svg    = d3.select('.vCubo').call(d3.drag().on('drag', dragged).on('start', dragStart).on('end', dragEnd)).append('g');
-//var cubesGroup = svg.append('g').attr('class', 'cubes');
+var svg    = d3.select('.vCubo').
+			call(d3.drag().
+			on('drag', Arrastra).
+			on('start', InicioArrastra).
+			on('end', FinArrastra)).
+			append('g');
 var carasPrisma = svg.append('g').attr('class', 'caras');
 var nodeSensor = svg.append('g').attr('class', 'caras');
 var sensorGroup = svg.append('g').attr('class', 'sensores');
@@ -12,68 +16,11 @@ nPos = [(metrosAncho*60),(metrosAlto*60),(metrosLargo*60)] // Posiciones x,y,z
 var horasPlayer = []
 var dataPlayer = [];
 
-$(function () {   
-  $('[data-toggle="popover"]').popover() 
-});
+var aDataid = [], aDataSensor = [], AlertasTemps = [], ArrayAlertas = [];
+var VarTemperatura = [], VarHumedadRelativa = [], VarHumedadSuelo = [], VarLuminosidad = [], ArrayTemperatura = [], ArrayHumedadRelativa = [], ArrayHumedadSuelo = [], ArrayLuminosidad = []; 
 
-$('body').click(function (e) {
-    if ($(e.target).parent().find('[data-toggle="popover"]').length > 0) {
-        $('#popoverinfonodos').popover('hide');
-    }
-});
-
-$( document ).ready(function() {
-	$.getJSON('https://spreadsheets.google.com/feeds/list/1DH9h8ZMBNLyW-WatGSSRdsBHFh6lQr0oa17ZU_AfZrU/od6/public/values?alt=json', function(data){
-		info = data.feed.entry;//obtiene toda la informacion del json.
-		$(info).each(function(){//recorre cada fila de datos.
-			var hora = this.gsx$hora.$t;
-			if(horasPlayer.indexOf(this.gsx$hora.$t)==-1){
-				horasPlayer.push(hora);
-			}
-			dataPlayer.push([this.gsx$macnodo.$t,-(nPos[2]/2)+(adaptZ(this.gsx$pz.$t)),(nPos[1]/2)-(this.gsx$py.$t*60),(-(nPos[0])/2)+(this.gsx$px.$t*60),this.gsx$tp.$t,this.gsx$hr.$t,this.gsx$hs.$t,this.gsx$lu.$t,this.gsx$hora.$t]);
-		});
-	});
-	muestrainfocubo();
-	$('.sensores').click(informe);
-	$("#botonreiniciar").click(reiniciaPos);
-
-	function muestrainfocubo(){
-		var ArrayInfoCubo = [];
-		ArrayInfoCubo.push("<div>"+"Ancho: "+"<b>"+metrosAncho+"</b>"+" metros"+"</div>","<div>"+"Largo: &nbsp;"+"<b>"+metrosLargo+"</b>"+" metros"+"</div>","<div>"+"Alto: &nbsp;&nbsp;&nbsp;&nbsp;"+"<b>"+metrosAlto+"</b>"+" metros"+"</div>");
-		document.getElementById('muestrainfocubo').innerHTML = ArrayInfoCubo.join("");
-	}
-
-	function informe(e){ //muestra datos de los sensores
-		var id = this.id;
-		var data = id.split(" ");
-		var idSensor = data[0];
-		var Temperatura = data[1];
-		var Humedad = data[2];
-		var Luminosidad = data[3];
-
-	    var PosXmouse = e.pageX,
-	        PosYmouse = e.pageY;
-
-	    console.log(PosXmouse,PosYmouse);
-		var pipovernodos = document.getElementById('popoverinfonodos')
-
-		pipovernodos.style.left = PosXmouse+15+"px"
-		pipovernodos.style.top = PosYmouse+"px"
-		$('#popoverinfonodos').popover('show');	
-	}
-	
-	function initSize(){// DIMENSIONES PRISMA (descartar)
-		var x = $("#nAncho").val();
-		var y = $("#nAlto").val();
-		var z = $("#nLargo").val();
-		nPos=[x*30,y*30,z*30];
-		initFaces(1,nPos[0],nPos[1],nPos[2]);
-	}
-});         
-
-function TESTING(){
-	$("#9999997").attr("stroke",d3.rgb(0,0,0));
-}
+var eFecha = "3/10/2018";//fecha que eligio el usuario.
+var tiempoData = "0:00";;
 
 var cubes3D = d3._3d()
 	.shape('CUBE')
@@ -84,6 +31,65 @@ var cubes3D = d3._3d()
 	.rotateX(-startAngle)
 	.origin(origin);
 
+$(function () {   
+  $('[data-toggle="popover"]').popover() 
+});
+
+$('body').click(function (e) {
+	if ($(e.target).parent().find('[data-toggle="popover"]').length > 0) {
+		$('#popoverinfonodos').popover('hide');
+	}
+});
+// === PRINCIPAL ================================================================
+$(document).ready(function(){
+	initallsensor(tiempoData);
+	initFaces(1,nPos[0],nPos[1],nPos[2]);
+	// Si quieren probar otras dimensiones cambiar valores del init, 
+	// y poner los mismos valores en arreglo nPos al comienzo.
+	muestrainfocubo();
+	
+	$(".sensores").click(informe);
+	$("#botonreiniciar").click(reiniciaPos);
+
+	$("#alertita").click(cambiaHora);
+});// ===========================================================================
+
+function muestrainfocubo(){
+	var ArrayInfoCubo = [];
+	ArrayInfoCubo.push("<div>Ancho: <b>"+ metrosAncho +"</b> metros</div>","<div>Largo: &nbsp;"+"<b>"+ metrosLargo +"</b> metros</div>","<div>Alto: &nbsp;&nbsp;&nbsp;&nbsp;<b>"+ metrosAlto +"</b> metros</div>");
+	$("#muestrainfocubo").html(ArrayInfoCubo);
+}
+
+function informe(e){ //muestra datos de los sensores
+	var id = this.id;
+	var data = id.split(" ");
+	var idSensor = data[0];
+	var Temperatura = data[1];
+	var Humedad = data[2];
+	var Luminosidad = data[3];
+
+	var PosXmouse = e.pageX,
+		PosYmouse = e.pageY;
+
+	console.log(PosXmouse,PosYmouse);
+	var pipovernodos = document.getElementById('popoverinfonodos')
+
+	pipovernodos.style.left = PosXmouse+15+"px"
+	pipovernodos.style.top = PosYmouse+"px"
+	$('#popoverinfonodos').popover('show');	
+}
+
+function initSize(){// DIMENSIONES PRISMA (descartar)
+	var x = $("#nAncho").val();
+	var y = $("#nAlto").val();
+	var z = $("#nLargo").val();
+	nPos=[x*30,y*30,z*30];
+	initFaces(1,nPos[0],nPos[1],nPos[2]);
+}
+
+function TESTING(){
+	$("#9999997").attr("stroke",d3.rgb(0,0,0));
+}
 
 function dataFaces(data, tt){ //atributos de las caras del cubo
 	var cubos = carasPrisma.selectAll('g.caras').data(data, function(d){ return d.id });
@@ -110,25 +116,24 @@ function dataFaces(data, tt){ //atributos de las caras del cubo
 		.attr('d', cubes3D.draw);
 }
 
-
 function initFaces(id, posX, posY, posZ){  // Creacion caras del prisma.
 	sensorData = [];                        
 	for(var i = 0; i < 3; i++){ // FOR PARA CREAR LAS 3 CARAS NECESARIAS EN EL GRAFICO
 		if(i == 0){ 			// ARREGLO nPos SON LAS DIMENSIONES EN PX DEL PRISMA, ESTA CREADA AL COMIENZO.
-			nDraw = [posZ/2,0,posX/2]    // ARREGLO DONDE SE PASA DIMENSIONES X,Y,Z PARA UTILIZARLO EN makeFaces.
-			var _cubo = makeFaces(0,posY/2, 0, nDraw); // CARA DE BASE.
+			nDraw = [posZ/2,0,posX/2]    // ARREGLO DONDE SE PASA DIMENSIONES X,Y,Z PARA UTILIZARLO EN creaCaras.
+			var _cubo = creaCaras(0,posY/2, 0, nDraw); // CARA DE BASE.
 				_cubo.id = 'cara' + 1;
 				sensorData.push(_cubo);
 		}
 		if(i == 1){ 	
 			nDraw = [0,posY/2,posX/2]   
-			var _cubo = makeFaces(posZ/2,0, 0, nDraw); // CARA DERECHA.
+			var _cubo = creaCaras(posZ/2,0, 0, nDraw); // CARA DERECHA.
 				_cubo.id = 'cara' + 2;
 				sensorData.push(_cubo);
 		}
 		if(i == 2){ 	
 			nDraw = [posZ/2,posY/2,0]
-			var _cubo = makeFaces(0,0,-posX/2, nDraw); // CARA FONDO.
+			var _cubo = creaCaras(0,0,-posX/2, nDraw); // CARA FONDO.
 				_cubo.id = 'cara' + 3;
 				sensorData.push(_cubo);
 		}
@@ -137,12 +142,11 @@ function initFaces(id, posX, posY, posZ){  // Creacion caras del prisma.
 }
 
 // FUNCIONES PARA PODER GIRAR/ROTAR EL CUBO
-
-function dragStart(){
+function InicioArrastra(){
 	mx = d3.event.x;
 	my = d3.event.y;}
 
-function dragged(){
+function Arrastra(){
 	mouseX = mouseX || 0;
 	mouseY = mouseY || 0;
 	beta   = (d3.event.x - mx + mouseX) * Math.PI / 230 ;
@@ -151,7 +155,7 @@ function dragged(){
 	dataCSensor(cubes3D.rotateY(beta + startAngle).rotateX(alpha - startAngle)(leSensor), 0);
 	dataFaces(cubes3D.rotateY(beta + startAngle).rotateX(alpha - startAngle)(sensorData), 0);}
 
-function dragEnd(){
+function FinArrastra(){
 	mouseX = d3.event.x - mx + mouseX;
 	mouseY = d3.event.y - my + mouseY;}
 
@@ -161,7 +165,7 @@ function reiniciaPos(){
 	dataCSensor(cubes3D.rotateY(beta + startAngle).rotateX(alpha - startAngle)(leSensor), 0);
 	dataFaces(cubes3D.rotateY(beta + startAngle).rotateX(alpha - startAngle)(sensorData), 0);}
 
-function makeFaces(x, y, z, dPos){
+function creaCaras(x, y, z, dPos){
 	return [
 		{x: x - dPos[0], y: y + dPos[1], z: z + dPos[2]}, // Parte Frente - Arriba izquierda
 		{x: x - dPos[0], y: y - dPos[1], z: z + dPos[2]}, // Parte Frente - Abajo izquierda
@@ -176,7 +180,6 @@ function makeFaces(x, y, z, dPos){
 		{x: x + dPos[0], y: y + dPos[1], z: z - dPos[2]}, // Parte Atras - Arriba derecha
 	];
 }
-
 
 function asgColor(tp){
 	if(tp<0){
@@ -201,7 +204,6 @@ function asgColor(tp){
     }
     return color;
 }
-
 
 // CODIGO PARA SENSORES
 function dataCSensor(data, tt, id, Data,tp,hr){ //ATRIBUTOS DE SENSORES
@@ -241,14 +243,13 @@ function dataCSensor(data, tt, id, Data,tp,hr){ //ATRIBUTOS DE SENSORES
 	faces.exit().remove();
 }
 
-	
 function initSensor(id, posX, posY, posZ, Temperatura, Humedad_Rel, Humedad_Suelo, Luz ,radio){
 	var tp = Temperatura.replace(",",".");
 	var Data = id+" "+posX+" "+posY+" "+posZ+" "+Temperatura+" "+Humedad_Rel+" "+Humedad_Suelo+" "+Luz;
 	//console.log(Data);
 
 	// leSensor = [];
-	var _cubo = makeSensor(posX, posY, posZ, radio);
+	var _cubo = creaSensor(posX, posY, posZ, radio);
 		_cubo.id = id;
 		_cubo.height = radio;
 		_cubo.width = radio;
@@ -257,7 +258,7 @@ function initSensor(id, posX, posY, posZ, Temperatura, Humedad_Rel, Humedad_Suel
 	dataCSensor(cubes3D(leSensor), 1000, _cubo.id,_cubo.name,tp,Humedad_Rel);
 }
 
-function makeSensor(x, y, z, radio){ //CREACION DE LAS CARAS DEL PRISMA
+function creaSensor(x, y, z, radio){ //CREACION DE LAS CARAS DEL PRISMA
 	return [
 		{x: x - radio, y: y + radio, z: z + radio}, // Parte frente - Arriba izquierda
 		{x: x - radio, y: y - radio, z: z + radio}, // Parte frente - Abajo izquierda
@@ -273,138 +274,72 @@ function makeSensor(x, y, z, radio){ //CREACION DE LAS CARAS DEL PRISMA
 	];
 }
 
-
-function initallsensor(){ // POSICIONA TODOS LOS SENSORES EN EL VISOR (CUBO)
-	var Digital=new Date();
-	var hora_actual=Digital.getHours();
-	var aDataid = [];
-	var aDataSensor = [];
-	var AlertasTemps = [];
-	var ArrayAlertas = [];
-	var VarTemperatura   = []; var VarHumedadRelativa   = [];    var VarHumedadSuelo      = []; var VarLuminosidad   = [];
-	var ArrayTemperatura = []; var ArrayHumedadRelativa = [];    var ArrayHumedadSuelo    = []; var ArrayLuminosidad = []; 
+function initallsensor(tiempoData){ // POSICIONA TODOS LOS SENSORES EN EL VISOR (CUBO)
 	// PRIMERO RESCATAREMOS LAS IDS QUE LLEGAN DE LOS NODOS EN EL JSON
-	$.getJSON('values.json', function(data){
+	$.getJSON('https://spreadsheets.google.com/feeds/list/1DH9h8ZMBNLyW-WatGSSRdsBHFh6lQr0oa17ZU_AfZrU/od6/public/values?alt=json', function(data){
 		info = data.feed.entry;//obtiene toda la informacion del json.
 		$(info).each(function(){
-			
 			//recorre cada fila de datos.
 			if(aDataid.indexOf(this.gsx$macnodo.$t)==-1){
 				aDataid.push(this.gsx$macnodo.$t);
-			}	
+			}
+			
 		});
-
-		//PARA CADA ID DEL ARRAY, SE GUARDARAN EN OTRO ARRAY LOS DATOS EN LA HORA ACTUAL. (NO DIA).
-		for(var i=0; i < aDataid.length ; i++){
-			$(info).each(function(){
-				var ax = (this.gsx$hora.$t).split(":");
-				if(this.gsx$macnodo.$t == aDataid[i] && ax[0] == hora_actual){
-					aDataSensor = [aDataid[i],-(nPos[2]/2)+(adaptZ(this.gsx$pz.$t)),(nPos[1]/2)-(this.gsx$py.$t*60),(-(nPos[0])/2)+(this.gsx$px.$t*60),this.gsx$tp.$t,this.gsx$hr.$t,this.gsx$hs.$t,this.gsx$lu.$t]
-					// MODIFICAR LOS RANDOM X Y Z, CONVERTIR LA CANTIDAD RESCATADA EN METROS
-					// this.gsx$px.$t this.gsx$y.$t  this.gsx$pz.$t 
-					// --------------------------------------------------------------------
-					initSensor(aDataSensor[0],aDataSensor[1],aDataSensor[2],aDataSensor[3],aDataSensor[4],aDataSensor[5],aDataSensor[6],aDataSensor[7],5);
-					console.log("Nodo "+i+":",aDataSensor[4]+" Grados")
-
-					VarTemperatura.push		([aDataSensor[0],aDataSensor[4]]);
-					VarHumedadRelativa.push ([aDataSensor[0],aDataSensor[5]]);
-					VarHumedadSuelo.push	([aDataSensor[0],aDataSensor[6]]);
-					VarLuminosidad.push		([aDataSensor[0],aDataSensor[7]]);
-
-					if((aDataSensor[4])>"1"){
-						console.log("Demasiada Temperatura");
-						AlertasTemps.push([aDataSensor[0],aDataSensor[4]]);
-					}	
-				}
-			})
-		}
-
-		console.log(AlertasTemps.length);
-
-		for(var i=0; i < AlertasTemps.length ; i++){
-			ArrayAlertas.push("<div>"+"El sensor "+"<b>"+AlertasTemps[i][0]+"</b>"+" alcanzó "+"<b>"+AlertasTemps[i][1]+"</b>"+" grados"+"</div>");
-		}
-
-		console.log(ArrayAlertas);
-
-		if((document.getElementById('muestrasensoralerta').innerHTML = AlertasTemps[0]) != undefined){
-			document.getElementById('muestrasensoralerta').innerHTML = ArrayAlertas.join("");
-			//document.getElementByClassName('popover-body')[0].style.visibility = 'hidden';
-		} else {
-			document.getElementById('muestrasensoralerta').innerHTML = "No hay alertas";
-		}
-		//for(var i=0; i < aDataSensor.length ; i++){
-		//	console.log(aDataSensor);
-		//};
-
-		// POP-OVER DE VARIABLES
-
-		// TEMPERATURA
-		console.log(VarTemperatura.length);
-
-		for(var i=0; i < VarTemperatura.length ; i++){
-			ArrayTemperatura.push("<div>"+"El sensor N° "+"<b>"+VarTemperatura[i][0]+"</b>"+" tiene una Temperatura de "+"<b>"+VarTemperatura[i][1]+"</b>"+"</div>");
-		}
-
-		console.log(ArrayTemperatura);
-
-		if((document.getElementById('muestratemp').innerHTML = VarTemperatura[0]) != undefined){
-			document.getElementById('muestratemp').innerHTML = ArrayTemperatura.join("");
-			//document.getElementByClassName('popover-body')[0].style.visibility = 'hidden';
-		} else {
-			document.getElementById('muestratemp').innerHTML = "No hay variables";
-		}
-
-		// HUMEDAD RELATIVA
-		console.log(VarHumedadRelativa.length);
-
-		for(var i=0; i < VarHumedadRelativa.length ; i++){
-			ArrayHumedadRelativa.push("<div>"+"El sensor N° "+"<b>"+VarHumedadRelativa[i][0]+"</b>"+" tiene una Humedad relativa de "+"<b>"+VarHumedadRelativa[i][1]+"</b>"+"</div>");
-		}
-
-		console.log(ArrayHumedadRelativa);
-
-		if((document.getElementById('muestrahumedadre').innerHTML = VarHumedadRelativa[0]) != undefined){
-			document.getElementById('muestrahumedadre').innerHTML = ArrayHumedadRelativa.join("");
-			//document.getElementByClassName('popover-body')[0].style.visibility = 'hidden';
-		} else {
-			document.getElementById('muestrahumedadre').innerHTML = "No hay variables";
-		}
-
-		// HUMEDAD SUELO
-
-		console.log(VarHumedadSuelo.length);
-
-		for(var i=0; i < VarHumedadSuelo.length ; i++){
-			ArrayHumedadSuelo.push("<div>"+"El sensor N° "+"<b>"+VarHumedadSuelo[i][0]+"</b>"+" tiene una Humedad de suelo de "+"<b>"+VarHumedadSuelo[i][1]+"</b>"+"</div>");
-		}
-
-		console.log(ArrayHumedadSuelo);
-
-		if((document.getElementById('muestrahumedadsu').innerHTML = VarHumedadSuelo[0]) != undefined){
-			document.getElementById('muestrahumedadsu').innerHTML = ArrayHumedadSuelo.join("");
-			//document.getElementByClassName('popover-body')[0].style.visibility = 'hidden';
-		} else {
-			document.getElementById('muestrahumedadsu').innerHTML = "No hay variables";
-		}
-
-		// LUMINOSIDAD
-
-		console.log(VarLuminosidad.length);
-
-		for(var i=0; i < VarLuminosidad.length ; i++){
-			ArrayLuminosidad.push("<div>"+"El sensor N° "+"<b>"+VarLuminosidad[i][0]+"</b>"+" tiene una luminosidad de "+"<b>"+VarLuminosidad[i][1]+"</b>"+"</div>");
-		}
-
-		console.log(ArrayLuminosidad);
-
-		if((document.getElementById('muestraluminosidad').innerHTML = VarLuminosidad[0]) != undefined){
-			document.getElementById('muestraluminosidad').innerHTML = ArrayLuminosidad.join("");
-			//document.getElementByClassName('popover-body')[0].style.visibility = 'hidden';
-		} else {
-			document.getElementById('muestraluminosidad').innerHTML = "No hay variables";
-		}
+		dibujaSensor(info, tiempoData);
+		infoPopups();//informacion de para mostrar en los pop-ups
 	});
+}
+
+function dibujaSensor(info, tiempoData){
+	//PARA CADA ID DEL ARRAY, SE GUARDARAN EN OTRO ARRAY LOS DATOS EN LA HORA ACTUAL. (NO DIA).
+	for(var i=0; i < aDataid.length ; i++){
+		$(info).each(function(){
+			var ax = (this.gsx$hora.$t).split(":");
+			if(this.gsx$macnodo.$t == aDataid[i] && this.gsx$hora.$t == tiempoData && this.gsx$fecha.$t == eFecha){
+				aDataSensor = [aDataid[i],-(nPos[2]/2)+(adaptZ(this.gsx$pz.$t)),(nPos[1]/2)-(this.gsx$py.$t*60),(-(nPos[0])/2)+(this.gsx$px.$t*60),this.gsx$tp.$t,this.gsx$hr.$t,this.gsx$hs.$t,this.gsx$lu.$t]
+				// MODIFICAR LOS RANDOM X Y Z, CONVERTIR LA CANTIDAD RESCATADA EN METROS
+				// this.gsx$px.$t this.gsx$y.$t  this.gsx$pz.$t 
+				// --------------------------------------------------------------------
+				initSensor(aDataSensor[0],aDataSensor[1],aDataSensor[2],aDataSensor[3],aDataSensor[4],aDataSensor[5],aDataSensor[6],aDataSensor[7],5);
+				console.log("Nodo "+i+":",aDataSensor[4]+" Grados")
+
+				VarTemperatura.push		([aDataSensor[0],aDataSensor[4]]);
+				VarHumedadRelativa.push ([aDataSensor[0],aDataSensor[5]]);
+				VarHumedadSuelo.push	([aDataSensor[0],aDataSensor[6]]);
+				VarLuminosidad.push		([aDataSensor[0],aDataSensor[7]]);
+
+				if((aDataSensor[4])>"1"){
+					console.log("Demasiada Temperatura");
+					AlertasTemps.push([aDataSensor[0],aDataSensor[4]]);
+				}
+				$("#miTiempo").html(this.gsx$hora.$t);//muestra la hora a la que se cambio
+			}
+		});
+	}
+}
+
+function infoPopups(){
+	for(var i=0;i<AlertasTemps.length;i++){ ArrayAlertas.push("<div>El sensor <b>"+ AlertasTemps[i][0] +"</b> alcanzó <b>"+ AlertasTemps[i][1] +"</b> grados</div>");}
+	for(var i=0;i<VarTemperatura.length;i++){ ArrayTemperatura.push("<div>El sensor N° <b>"+ VarTemperatura[i][0] +"</b> tiene una Temperatura de <b>"+ VarTemperatura[i][1] +"</b></div>");}
+	for(var i=0;i<VarHumedadRelativa.length;i++){ ArrayHumedadRelativa.push("<div>El sensor N° <b>"+ VarHumedadRelativa[i][0] +"</b> tiene una Humedad relativa de <b>"+ VarHumedadRelativa[i][1] +"</b></div>");}
+	for(var i=0;i<VarHumedadSuelo.length;i++){ ArrayHumedadSuelo.push("<div>El sensor N° <b>"+ VarHumedadSuelo[i][0] +"</b> tiene una Humedad de suelo de <b>"+ VarHumedadSuelo[i][1] +"</b></div>");}
+	for(var i=0;i<VarLuminosidad.length;i++){ ArrayLuminosidad.push("<div>El sensor N° <b>"+ VarLuminosidad[i][0] +"</b> tiene una luminosidad de <b>"+ VarLuminosidad[i][1] +"</b></div>");}
+	
+	console.log("AlertasTemps[0]: "+ AlertasTemps[0]);
+	if(AlertasTemps[0] != undefined){ $("#muestrasensoralerta").html(ArrayAlertas);
+	}else{ $("#muestrasensoralerta").html("No hay alertas");}
+
+	if(VarTemperatura[0] != undefined){ $("#muestratemp").html(ArrayTemperatura);
+	}else{ $("#muestratemp").html("No hay variables");}
+
+	if(VarHumedadRelativa[0] != undefined){ $("#muestrahumedadre").html(ArrayHumedadRelativa);
+	}else{ $("#muestrahumedadre").html("No hay variables");}
+
+	if(VarHumedadSuelo[0] != undefined){ $("#muestrahumedadsu").html(ArrayHumedadSuelo);
+	}else{ $("#muestrahumedadsu").html("No hay variables");}
+
+	if(VarLuminosidad[0] != undefined){ $("#muestraluminosidad").html(ArrayLuminosidad);
+	}else{ $("#muestraluminosidad").html("No hay variables");}
 }
 
 function reproduceData(i){
@@ -431,25 +366,14 @@ function adaptZ(posZ){
 	return (newPos*60); 
 }
 
-// FIN CODIGO DE SENSORES
-
-initallsensor();
-initFaces(1,nPos[0],nPos[1],nPos[2]);
-
-
-// Si quieren probar otras dimensiones cambiar valores del init, 
-// y poner los mismos valores en arreglo nPos al comienzo.
-
-// ==========================================================
-// === DATOS DE LOS SENSORES ================================
-// $("#MuestraDatosJSON").click(ObtieneDatos);
-//function ObtieneDatos(){
-	//$.getJSON('https://spreadsheets.google.com/feeds/list/1DH9h8ZMBNLyW-WatGSSRdsBHFh6lQr0oa17ZU_AfZrU/od6/public/values?alt=json', function(data){//MODO ONLINE
-//	$.getJSON('values.json', function(data){//MODO OFFLINE
-//		$("#datos").append("<h2>Informacion recolectada de JSON</h2>");
-//		info = data.feed.entry;//obtiene toda la informacion del json.
-//		$(info).each(function(){//recorre cada fila de datos.
-//			$("#datos").append("<p><b>Fecha:</b> "+ this.gsx$fecha.$t +" <b>Hora:</b> "+ this.gsx$hora.$t +" <b>Mac Concentrador:</b> "+ this.gsx$macconcentrador.$t +" <b>Mac Nodo:</b> "+ this.gsx$macnodo.$t +" <b>px:</b> "+ this.gsx$px.$t +" <b>py:</b> "+ this.gsx$py.$t +" <b>pz:</b> "+this.gsx$pz.$t +" <b>tp:</b> "+ this.gsx$tp.$t +" <b>hr:</b> "+ this.gsx$hr.$t +" <b>hs:</b> "+this.gsx$hs.$t +" <b>lu:</b> "+ this.gsx$lu.$t +" <b>al:</b> "+ this.gsx$al.$t +"</p>");
-//		});
-//	});
-//}
+function cambiaHora(){
+	console.log("CLICK!");
+	tiempoData = "19:00";//, info = [];
+	// aDataid = [], aDataSensor = [], AlertasTemps = [], ArrayAlertas = [];
+	// VarTemperatura = [], VarHumedadRelativa = [], VarHumedadSuelo = [], VarLuminosidad = [];
+	// ArrayTemperatura = [], ArrayHumedadRelativa = [], ArrayHumedadSuelo = [], ArrayLuminosidad = [];
+	$(".sensores").empty();
+	// console.log(aDataSensor);
+	initallsensor(tiempoData);
+	console.log("\tSale cambiaHora()");
+}
