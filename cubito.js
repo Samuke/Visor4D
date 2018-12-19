@@ -92,6 +92,10 @@ function informe(e){ //muestra datos de los sensores
 	pipovernodos.style.left = PosXmouse+15+"px"
 	pipovernodos.style.top = PosYmouse+"px"
 	$('#popoverinfonodos').popover('show');	
+	setTimeout(function(){
+		$('#popoverinfonodos').popover('hide');	
+	}, 4000);
+
 }
 
 function initSize(){// DIMENSIONES PRISMA (descartar)
