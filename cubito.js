@@ -10,11 +10,15 @@ var nodeSensor = svg.append('g').attr('class', 'caras');
 var sensorGroup = svg.append('g').attr('class', 'sensores');
 var mx, my, mouseX, mouseY;
 var metrosAncho = 5;
-var metrosLargo = 7;
+var metrosLargo = 5;
 var metrosAlto = 4;
 nPos = [(metrosAncho*60),(metrosAlto*60),(metrosLargo*60)] // Posiciones x,y,z
-var horasPlayer = []
 var dataPlayer = [];
+var tHoras = ["0:00","1:00","2:00","3:00","4:00","5:00","6:00","7:00",
+			 "8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00",
+			 "17:00","18:00","19:00","20:00","21:00","22:00","23:00"];
+var horasRep = [];
+
 
 var aDataid = [], aDataSensor = [], AlertasTemps = [], ArrayAlertas = [];
 var VarTemperatura = [], VarHumedadRelativa = [], VarHumedadSuelo = [], VarLuminosidad = [], ArrayTemperatura = [], ArrayHumedadRelativa = [], ArrayHumedadSuelo = [], ArrayLuminosidad = []; 
@@ -23,7 +27,8 @@ var eFecha = "3/10/2018";//fecha que eligio el usuario.
 var Datex = new Date();
 var HoraActual = Datex.getHours();
 var tiempoData = HoraActual+":00";
-
+var nIn;
+var act;
 var cubes3D = d3._3d()
 	.shape('CUBE')
 	.x(function(d){ return d.x; })
@@ -49,14 +54,25 @@ $(document).ready(function(){
 	$.getJSON('https://spreadsheets.google.com/feeds/list/1DH9h8ZMBNLyW-WatGSSRdsBHFh6lQr0oa17ZU_AfZrU/od6/public/values?alt=json', function(data){
 		info = data.feed.entry;//obtiene toda la informacion del json.
 		$(info).each(function(){//recorre cada fila de datos.
-			var hora = this.gsx$hora.$t;
-			if(horasPlayer.length<24){
-				horasPlayer.push(hora);
-			}
-			console.log(horasPlayer[23])
 			dataPlayer.push([this.gsx$macnodo.$t,-(nPos[2]/2)+(adaptZ(this.gsx$pz.$t)),(nPos[1]/2)-(this.gsx$py.$t*60),(-(nPos[0])/2)+(this.gsx$px.$t*60),this.gsx$tp.$t,this.gsx$hr.$t,this.gsx$hs.$t,this.gsx$lu.$t,this.gsx$hora.$t]);
 		});
 	});
+	for (var i = 0; i < tHoras.length; i++) {
+		if(tiempoData==tHoras[i]){
+			nIn = i;
+		}
+	}
+	for (var i = 0; i < tHoras.length; i++) {
+		act = nIn+i;
+		if(act>=tHoras.length){
+			i=0;
+			nIn=0;
+		}
+		if(horasRep.length<=tHoras.length){
+			horasRep.push(tHoras[nIn+i]);
+		}
+	}
+	console.log(horasRep);
 	initallsensor(tiempoData);
 	initFaces(1,nPos[0],nPos[1],nPos[2]);
 	// Si quieren probar otras dimensiones cambiar valores del init, 
@@ -362,21 +378,22 @@ function infoPopups(){
 }
 
 function reproduceData(i){
-	if(i <= horasPlayer.length){ // Vamos recorriendo todas las horas de 0:00 hasta 0:00
-		for (var j = 0 ; j < dataPlayer.length; j++) { // Recorremos todos los datos
-			if(dataPlayer[j][8] == horasPlayer[i]){    // Y vemos en donde la hora de este NODO sea igual a la hora actual recorrida.
-				var tp = adaptZ(dataPlayer[j][4])/60;	// obtenemos la temperatura del arreglo donde tenemos toda la info.
-				var color = asgColor(tp);				
-				$("#"+dataPlayer[j][0]).attr("fill",color); 	//Graficamos el nodo segun temperatura de la hora 
-				$("#"+dataPlayer[j][0]).attr("stroke",color);	
-			}
-		}
-		console.log(horasPlayer[i])
-		i++;
-		setTimeout(function(){
-	        reproduceData(i);
-	    },1000);
-	}
+    if(i <= horasRep.length){ // Vamos recorriendo todas las horas de 0:00 hasta 0:00
+        for (var j = 0 ; j < dataPlayer.length; j++) { // Recorremos todos los datos
+            if(dataPlayer[j][8] == horasRep[i]){    // Y vemos en donde la hora de este NODO sea igual a la hora actual recorrida.
+                var tp = adaptZ(dataPlayer[j][4])/60;    // obtenemos la temperatura del arreglo donde tenemos toda la info.
+                var color = asgColor(tp);
+                $("#"+dataPlayer[j][0]).attr("fill",color);     //Graficamos el nodo segun temperatura de la hora 
+                $("#"+dataPlayer[j][0]).attr("stroke",color);
+                $("#miTiempo").html(horasRep[i]); 
+            }
+        }
+        console.log(horasRep[i])
+        i++;
+        setTimeout(function(){
+            reproduceData(i);
+        },1000);
+    }
 }
 
 // FUNCION SOLO UTILIZADA PARA CAMBIAR COMA POR PUNTO DE LA POSICION Z
