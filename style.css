@@ -1,0 +1,25 @@
+html, body{height:100%;}
+body{margin:0;line-height:0;}
+figure{margin:0;}
+label{margin-bottom:1em;}
+.vCubo{background-color:white;height:83%;width:100%;} /* Estilo del cubo */
+.linT{align-items:center;background-color:#939393;display:flex;height:20%;width:95%;width: 95%;position: relative;top: -2em;left: 2em;border-radius:15px;overflow:hidden;}
+.play{background-color:#2e2e2e;border:none;border-radius:100%;cursor:pointer;font-size:0;height:50px;margin-right:20px;width:50px;}
+.play:hover{background-color:#787878;}
+.play:before{border-bottom:10px solid transparent;border-left:10px solid white;border-right:10px solid transparent;border-top:10px solid transparent;content:'';height:10px;width:10px;margin-left:calc(50% - 5px);}
+.barra{background-color:#868686;border-radius:100px;height:0.8em;overflow:hidden;width:100%;}
+.progreso{background-color:#9f2323;height:100%;width:0;}
+#tempe{position:absolute;top:22%;right:15px;border:3px solid black;}
+.lt{background-color:rgba(0,0,0,0.3);height:60px;border-radius:20px;width:100%;}
+.linea{align-items:center;display:flex;height:15%;}
+.linea h2{font-size:1.5em;}
+.btnsCentrales{position:absolute;width:100%;bottom:15%;}
+.popover{max-width: 100%;}  /* Maximo anchura popovers */
+#muestrasensoralerta,#muestrainfonodosm,#muestrainfocubo{text-decoration:none; color:black}
+#popoverinfonodos{position: absolute}
+.btn-variables{display:grid;grid-column-gap:1em;grid-row-gap:1em;}
+.btn-tempe{background-color:#ff8e41;border-color:#ff6700;color:#fff;}
+.btn-humerel{background-color:#51bafe;border-color:#549fff;color:#2f2f2f;}
+.btn-humesuel{background-color:#f8ca8d;border-color:#ffaf54;color:#2f2f2f;}
+.btn-lumi{background-color:#ffdc61;border-color:#ffba2e;color:#2f2f2f;}
+.btn-redondo{background-color:#efefef;border:1px solid #c3c3c3;border-radius:100% !important;padding:1em !important;}
