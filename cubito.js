@@ -1,24 +1,24 @@
-var origin = [400, 300], scale = 10, cubesData = [], sensorData = [], leSensor = [], alpha = 0, beta = 0, startAngle = Math.PI/6;
+var origin = [400, 300], cubesData = [], sensorData = [], leSensor = [], alpha = 0, beta = 0, startAngle = Math.PI/6;
 var svg    = d3.select('.vCubo').
 			call(d3.drag().
 			on('drag', Arrastra).
 			on('start', InicioArrastra).
 			on('end', FinArrastra)).
+			call(d3.zoom().
+			scaleExtent([1, 3]).
+			on("zoom", zoomed)).
 			append('g');
 var carasPrisma = svg.append('g').attr('class', 'caras');
 var nodeSensor = svg.append('g').attr('class', 'caras');
 var sensorGroup = svg.append('g').attr('class', 'sensores');
 var mx, my, mouseX, mouseY;
-var metrosAncho = 5;
-var metrosLargo = 5;
-var metrosAlto = 4;
+var mTk, mTx, mTy, reiniciado = false;
+var metrosAncho = 5, metrosLargo = 4, metrosAlto = 4;//Dimensiones del cubo
 nPos = [(metrosAncho*60),(metrosAlto*60),(metrosLargo*60)] // Posiciones x,y,z
-var dataPlayer = [];
+var dataPlayer = [], horasRep = [];
 var tHoras = ["0:00","1:00","2:00","3:00","4:00","5:00","6:00","7:00",
 			 "8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00",
 			 "17:00","18:00","19:00","20:00","21:00","22:00","23:00"];
-var horasRep = [];
-
 
 var aDataid = [], aDataSensor = [], AlertasTemps = [], ArrayAlertas = [];
 var VarTemperatura = [], VarHumedadRelativa = [], VarHumedadSuelo = [], VarLuminosidad = [], ArrayTemperatura = [], ArrayHumedadRelativa = [], ArrayHumedadSuelo = [], ArrayLuminosidad = []; 
@@ -27,8 +27,7 @@ var eFecha = "3/10/2018";//fecha que eligio el usuario.
 var Datex = new Date();
 var HoraActual = Datex.getHours();
 var tiempoData = HoraActual+":00";
-var nIn;
-var act;
+var nIn, act, wPadre, espaciado, espacPlus = 0;
 var cubes3D = d3._3d()
 	.shape('CUBE')
 	.x(function(d){ return d.x; })
@@ -49,6 +48,7 @@ $('body').click(function (e) {
 });
 // === PRINCIPAL ================================================================
 $(document).ready(function(){
+	getAncho();
 	$("#miTiempo").html(tiempoData);
 
 	$.getJSON('https://spreadsheets.google.com/feeds/list/1DH9h8ZMBNLyW-WatGSSRdsBHFh6lQr0oa17ZU_AfZrU/od6/public/values?alt=json', function(data){
@@ -196,6 +196,8 @@ function FinArrastra(){
 
 function reiniciaPos(){
 	beta=0;alpha=0;mouseX=0;mouseY=0;
+	svg.attr("transform", d3.zoomIdentity.translate(0,0).scale(1) );
+	mTk = 1, mTx = 0, mTy = 0;
 	
 	dataCSensor(cubes3D.rotateY(beta + startAngle).rotateX(alpha - startAngle)(leSensor), 0);
 	dataFaces(cubes3D.rotateY(beta + startAngle).rotateX(alpha - startAngle)(sensorData), 0);}
@@ -385,7 +387,9 @@ function reproduceData(i){
                 var color = asgColor(tp);
                 $("#"+dataPlayer[j][0]).attr("fill",color);     //Graficamos el nodo segun temperatura de la hora 
                 $("#"+dataPlayer[j][0]).attr("stroke",color);
-                $("#miTiempo").html(horasRep[i]); 
+                $("#miTiempo").html(horasRep[i]);
+				$(".progreso").css("width",espacPlus+"px");
+				espacPlus = espacPlus + espaciado;
             }
         }
         console.log(horasRep[i])
@@ -439,10 +443,31 @@ function cambiaHora(){
 	console.log(VarTemperatura);
 	infoPopups()
 	$("#miTiempo").html(tiempoData);//muestra la hora a la que se cambio
-	// aDataid = [], aDataSensor = [], AlertasTemps = [], ArrayAlertas = [];
-	// VarTemperatura = [], VarHumedadRelativa = [], VarHumedadSuelo = [], VarLuminosidad = [];
-	// ArrayTemperatura = [], ArrayHumedadRelativa = [], ArrayHumedadSuelo = [], ArrayLuminosidad = [];
-	// console.log(aDataSensor);
-	//updateSensor(tiempoData);
-	console.log("\tSale cambiaHora()");
+	// console.log("\tSale cambiaHora()");
+}
+
+function zoomed(){
+	if(reiniciado){
+		d3.event.transform = {k: mTk, x: mTx, y: mTy};
+		reiniciado = false;}
+	mTk = d3.event.transform.k;
+	mTx = d3.event.transform.x;
+	mTy = d3.event.transform.y;
+	svg.attr("transform", d3.event.transform);
+	d3.event.transform = {k: mTk, x: mTx, y: mTy};
+}
+
+
+function play(i){
+	console.log("Ancho barra:" + wPadre);
+	for(i=0;i<wPadre;i++){
+		$(".progreso").css("width",i+"px");
+		// console.log(i);
+	}
+}
+
+function getAncho(){
+	wPadre = $(".linT").width();
+	espaciado = parseInt((wPadre / 24) /4 );
+	// console.log(wPadre +" "+ espaciado);
 }
