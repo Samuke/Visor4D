@@ -456,11 +456,6 @@ function visor(metrosAncho, metrosLargo, metrosAlto, datosJSON, eFecha){
 		}
 	}
 
-	function testo(){
-		console.log("ANCHO!");
-		$(".progreso").css("width",0+"%");
-	}
-
 	// FUNCION SOLO UTILIZADA PARA CAMBIAR COMA POR PUNTO DE LA POSICION Z
 	function adaptZ(posZ){
 		var newPos = posZ.replace(",", ".");
